@@ -4,9 +4,10 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev --turbopack",
-		"build": "next build",
+		"build": "tsc -b && next build",
 		"start": "next start",
-		"lint": "next lint",
+		"lint": "eslint --ext .js,.jsx,.ts,.tsx app",
+		"lint:fix": "eslint --ext .js,.jsx,.ts,.tsx app --fix",
 		"upgrade": "npx npm-check-updates -u && npm install"
 	},
 	"dependencies": {
@@ -20,11 +21,15 @@
 	},
 	"devDependencies": {
 		"@eslint/eslintrc": "^3.3.0",
+		"@eslint/js": "^9.22.0",
 		"@types/node": "^22.13.10",
 		"@types/react": "^19.0.10",
 		"@types/react-dom": "^19.0.4",
 		"eslint": "^9.22.0",
 		"eslint-config-next": "^15.2.2",
-		"typescript": "^5.8.2"
+		"eslint-plugin-react": "^7.37.4",
+		"globals": "^16.0.0",
+		"typescript": "^5.8.2",
+		"typescript-eslint": "^8.26.1"
 	}
 }
