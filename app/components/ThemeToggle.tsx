@@ -1,22 +1,38 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import useLocalStorage from 'use-local-storage';
 
 const ThemeToggle = () => {
-  const defaultDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const [darkMode, setDarkMode] = useLocalStorage(
-    'theme',
-    defaultDark ? 'dark' : 'light'
-  );
+  // Set initial theme based on localStorage, falling back to 'light'
+  const [darkMode, setDarkMode] = useLocalStorage('theme', 'light');
+  // Track if component is mounted
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // Mark component as mounted
+    setMounted(true);
+
+    // Check system preference and update if no existing preference
+    const defaultDark = window.matchMedia(
+      '(prefers-color-scheme: dark)'
+    ).matches;
+    if (!localStorage.getItem('theme')) {
+      setDarkMode(defaultDark ? 'dark' : 'light');
+    }
+
+    // Apply theme
     if (darkMode === 'dark') {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
-  }, [darkMode]);
+  }, [darkMode, setDarkMode]);
+
+  // Prevent flash of incorrect theme by not rendering until mounted
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <button
