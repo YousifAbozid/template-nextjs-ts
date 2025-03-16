@@ -1,6 +1,7 @@
 {
   "name": "template-nextjs-ts",
   "version": "1.0.0",
+  "description": "A modern template for Next.js v15 with TypeScript, Tailwind CSS v4, dark mode, and comprehensive tooling including ESLint, Prettier, and Husky",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
