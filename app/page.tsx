@@ -6,7 +6,7 @@ export default function Home() {
       <header className="py-6 px-4 md:px-8 border-b border-border-l dark:border-border-d">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-2xl md:text-3xl font-bold">
-            React + TS + Vite + Tailwind Template
+            Next.js v15 + TypeScript + Tailwind CSS v4 Template
           </h1>
           <ThemeToggle />
         </div>
@@ -18,31 +18,31 @@ export default function Home() {
             Modern Web Development Template
           </h2>
           <p className="text-l-text-2 dark:text-d-text-2 mb-4">
-            A ready-to-use template featuring React 19, TypeScript, Vite, and
-            Tailwind CSS v4 with a comprehensive theming system and dark mode
-            support.
+            A modern, ready-to-use template for building web applications with
+            Next.js v15, TypeScript, and Tailwind CSS v4, featuring a
+            comprehensive theming system with dark mode support.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
             <FeatureCard
               icon="🎨"
-              title="Theme System"
+              title="Complete Theme System"
               description="Semantic color variables for consistent design"
             />
             <FeatureCard
               icon="🌓"
-              title="Dark Mode"
+              title="Dark Mode Support"
               description="Built-in dark mode with system preference detection"
             />
             <FeatureCard
               icon="⚛️"
-              title="React 19"
-              description="Latest React features and improvements"
+              title="Next.js v15 with App Router"
+              description="The React framework for production applications"
             />
             <FeatureCard
-              icon="⚡️"
-              title="Vite"
-              description="Lightning-fast development experience"
+              icon="🧹"
+              title="ESLint & Prettier"
+              description="Linting and formatting for consistent code quality"
             />
           </div>
         </section>
@@ -183,7 +183,7 @@ npm run dev`}</code>
 
       <footer className="py-6 px-4 md:px-8 border-t border-border-l dark:border-border-d mt-12">
         <div className="container mx-auto text-center text-l-text-3 dark:text-d-text-3">
-          <p>React 19 + TypeScript + Vite + Tailwind CSS v4 Template</p>
+          <p>Next.js v15 + TypeScript + Tailwind CSS v4 Template</p>
           <p className="mt-1">Built with 💙 by Yousif Abozid</p>
         </div>
       </footer>
