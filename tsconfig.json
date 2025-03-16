@@ -17,7 +17,6 @@
     "moduleDetection": "auto",
 
     "skipLibCheck": true,
-    "composite": true,
     "allowSyntheticDefaultImports": true,
     "noEmit": true,
 
