@@ -6,20 +6,19 @@
     "jsx": "preserve",
     "incremental": true,
 
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    "tsBuildInfoFile": "./.next/tsconfig.tsbuildinfo",
     "target": "ES2022",
     "lib": ["dom", "dom.iterable", "esnext"],
 
     "module": "ESNext",
-    "skipLibCheck": true,
-    "composite": true,
-    "allowSyntheticDefaultImports": true,
-
-    /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
-    "moduleDetection": "force",
+    "moduleDetection": "auto",
+
+    "skipLibCheck": true,
+    "composite": true,
+    "allowSyntheticDefaultImports": true,
     "noEmit": true,
 
     /* Linting */
@@ -27,13 +26,14 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true,
 
     "plugins": [
       {
         "name": "next"
       }
     ],
+
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./*"]
     }
