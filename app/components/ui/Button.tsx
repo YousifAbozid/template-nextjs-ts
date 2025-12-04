@@ -42,9 +42,10 @@ export interface ButtonProps extends Omit<
   variant?: ButtonVariant;
   size?: ButtonSize;
   loading?: boolean;
+  asChild?: boolean;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+const Button = React.forwardRef<HTMLElement, ButtonProps>(
   (
     {
       className,
@@ -53,16 +54,31 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       loading,
       children,
       disabled,
+      asChild = false,
       ...props
     },
     ref
   ) => {
+    const classes = [getButtonClasses(variant, size), className]
+      .filter(Boolean)
+      .join(' ');
+
+    if (asChild) {
+      const child = children as React.ReactElement<
+        React.HTMLAttributes<HTMLElement>
+      >;
+      const { className: childClassName, ...childProps } = child.props || {};
+      return React.cloneElement(child, {
+        className: [classes, childClassName].filter(Boolean).join(' '),
+        ...childProps,
+        ...props,
+      });
+    }
+
     return (
       <motion.button
-        className={[getButtonClasses(variant, size), className]
-          .filter(Boolean)
-          .join(' ')}
-        ref={ref}
+        className={classes}
+        ref={ref as React.Ref<HTMLButtonElement>}
         disabled={disabled || loading}
         whileHover={{ scale: disabled || loading ? 1 : 1.02 }}
         whileTap={{ scale: disabled || loading ? 1 : 0.98 }}
