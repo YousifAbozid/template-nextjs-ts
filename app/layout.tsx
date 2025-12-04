@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'Next.js Full-Stack Template',
   description:
-    '🚀 Production-ready Next.js 15+ full-stack template with TypeScript, MongoDB, Tailwind CSS v4, and comprehensive tooling. Features auto-generated OpenAPI documentation, type-safe API client, React Query integration, dark mode support, custom UI components with Framer Motion, form validation with Zod, and complete developer experience with ESLint, Prettier, and Husky. Perfect for building scalable web applications with modern architecture patterns. ✨',
+    '🚀 Production-ready Next.js 16+ full-stack template with TypeScript, MongoDB, Tailwind CSS v4, and comprehensive tooling. Features auto-generated OpenAPI documentation, type-safe API client, React Query integration, dark mode support, custom UI components with Framer Motion, form validation with Zod, and complete developer experience with ESLint, Prettier, and Husky. Perfect for building scalable web applications with modern architecture patterns. ✨',
 };
 
 export default function RootLayout({
