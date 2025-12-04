@@ -1,274 +1,304 @@
-# Next.js v15, TypeScript, Tailwind CSS v4, Prettier, ESLint and Husky Template
+# 🚀 Next.js Backend Template
 
-A modern, ready-to-use template for building web applications with Next.js v15, TypeScript, and Tailwind CSS v4, featuring a comprehensive theming system with dark mode support.
+A production-ready Next.js 16+ API backend template with MongoDB integration, dynamic OpenAPI generation, and automatic type-safe documentation.
 
-## Features
+## ✨ Features
 
-- 🎨 Complete theming system with semantic color variables
-- 🌓 Dark mode support out of the box
-- 📱 Responsive design ready
-- 🚀 Optimized for Tailwind CSS v4
-- ⚛️ Next.js v15 with TypeScript and App Router
-- ⚡️ Fast development and builds with Next.js
-- 🧹 ESLint and Prettier for code quality
-- 🪝 Husky and lint-staged for pre-commit hooks
+### 🎯 **Dynamic OpenAPI System**
 
-## Technologies Used
+- **Automatic Route Discovery**: Scans `app/api/**/route.ts` files automatically
+- **Type Extraction**: Reads co-located `types.ts` files and generates schemas
+- **Zero Configuration**: Works out of the box with your existing code structure
+- **Live Documentation**: Interactive Swagger UI at `/api/docs`
+- **Type Safety**: Auto-generated TypeScript types and API client
 
-This template combines the following technologies to provide a modern development experience:
+### 🗃️ **MongoDB Integration**
 
-- **Next.js v15**: The React framework for production with App Router and latest features
-- **TypeScript**: Static type checking for more robust code
-- **Tailwind CSS v4**: Utility-first CSS framework with built-in dark mode support
-- **ESLint**: Linting utility for identifying and fixing code problems
-- **Prettier**: Code formatter for consistent styling
-- **Husky**: Git hooks to enforce code quality checks before commits
-- **lint-staged**: Run linters on git staged files
+- **Mongoose ODM**: Full MongoDB integration with schema validation
+- **Connection Caching**: Optimized for serverless environments
+- **Middleware Pattern**: `withDatabase` wrapper for seamless DB connections
+- **Model Organization**: Clean separation of concerns with organized models
 
-## Getting Started
+### 🔧 **Developer Experience**
+
+- **Hot Reload**: Watch mode for automatic OpenAPI regeneration
+- **Type Safety**: Full TypeScript support with strict type checking
+- **Route-Centric**: Co-located types and endpoints for better maintainability
+- **Modern Stack**: Next.js 16+ App Router with ES modules
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js 18+
+- MongoDB Atlas account or local MongoDB instance
+- npm or yarn
 
 ### Installation
 
-1. Clone this repository:
+```bash
+# Clone the template
+git clone https://github.com/YousifAbozid/template-nextjs-backend.git
+cd template-nextjs-backend
 
-   ```bash
-   git clone [repository-url] my-project
-   cd my-project
-   ```
+# Install dependencies
+npm install
 
-2. Install dependencies:
+# Setup environment
+cp .env.example .env
+# Edit .env with your MongoDB connection string
 
-   ```bash
-   npm install
-   # or
-   yarn install
-   # or
-   pnpm install
-   # or
-   bun install
-   ```
+# Generate API documentation and types
+npm run api:generate
 
-3. Start the development server:
-
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   # or
-   pnpm dev
-   # or
-   bun dev
-   ```
-
-4. Open your browser and visit http://localhost:3000
-
-### Project Structure
-
-```
-template-nextjs-ts/
-├── .husky/                # Git hooks configuration
-├── app/                   # Next.js App Router
-│   ├── components/        # Reusable components
-│   ├── layout.tsx         # Root layout
-│   └── page.tsx           # Home page component
-├── public/                # Static assets
-├── styles/                # Global styles and theme variables
-├── next.config.js         # Next.js configuration
-├── tsconfig.json          # TypeScript configuration
-├── eslint.config.js       # ESLint configuration (new format)
-└── package.json           # Project dependencies and scripts
+# Start development server
+npm run dev
 ```
 
-## Available Scripts
+### Environment Variables
 
-The template includes the following npm scripts:
-
-- **`npm run dev`**: Start the development server
-- **`npm run build`**: Build the app for production
-- **`npm start`**: Run the production build
-- **`npm run lint`**: Run ESLint to check for code issues
-- **`npm run lint:fix`**: Run ESLint and automatically fix issues
-- **`npm run format`**: Run Prettier to format all files
-- **`npm run format:check`**: Check if files are properly formatted
-- **`npm run fix-all`**: Run both lint:fix and format to fix all issues
-- **`npm run upgrade`**: Update all dependencies to their latest versions
-
-## Theme System
-
-This template includes a carefully crafted theming system with semantic color variables for both light and dark modes.
-
-### Color System Structure
-
-Colors are organized in the following categories:
-
-- **Light/Dark Background Colors**: Primary, secondary, tertiary, and hover states
-- **Light/Dark Text Colors**: Primary, secondary, tertiary, and inverted text
-- **Accent Colors**: Primary, secondary, success, warning, danger
-- **Border Colors**: Light and dark mode borders
-- **Shadow Colors**: For consistent box-shadow effects
-
-### How to Use Theme Colors
-
-You can apply theme colors directly using Tailwind utility classes:
-
-```jsx
-// Background colors
-<div className="bg-l-bg-1 dark:bg-d-bg-1">...</div>
-
-// Text colors
-<p className="text-l-text-2 dark:text-d-text-2">...</p>
-
-// Border colors
-<div className="border border-border-l dark:border-border-d">...</div>
-
-// Accent colors
-<button className="bg-accent-1">Primary Action</button>
-<div className="text-accent-success">Success message</div>
+```bash
+# .env
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/database
+API_TITLE="Your API Title"
+API_VERSION="1.0.0"
+API_DESCRIPTION="Your API Description"
 ```
 
-### More Theme Examples
+## 📁 Project Structure
 
-```jsx
-// Button with theme colors
-<button className="bg-accent-1 hover:bg-accent-2 text-l-text-inv dark:text-d-text-inv px-4 py-2 rounded">
-  Submit
-</button>
-
-// Card with theme colors
-<div className="bg-l-bg-2 dark:bg-d-bg-2 border border-border-l dark:border-border-d rounded-lg p-4 shadow-md">
-  <h3 className="text-l-text-1 dark:text-d-text-1 font-bold">Card Title</h3>
-  <p className="text-l-text-2 dark:text-d-text-2">Card content goes here...</p>
-  <span className="text-accent-success">Success message</span>
-</div>
-
-// Alert component using theme colors
-<div className="bg-l-bg-3 dark:bg-d-bg-3 border-l-4 border-accent-warning p-4">
-  <p className="text-l-text-1 dark:text-d-text-1">Warning alert message</p>
-</div>
-
-// Error state using theme colors
-<div className="text-accent-danger border border-accent-danger rounded p-2">
-  Error message
-</div>
+```
+app/
+├── api/                    # 🟢 API Routes (You modify these)
+│   ├── users/
+│   │   ├── route.ts       # API endpoints (GET, POST, etc.)
+│   │   └── types.ts       # Route-specific DTOs/interfaces
+│   ├── health/            # Health check endpoint
+│   ├── docs/              # Swagger UI documentation
+│   └── swagger/           # OpenAPI specification endpoint
+├── lib/                   # Shared utilities and business logic
+│   └── api/
+│       ├── database/      # 🟢 Database connection utilities
+│       ├── middleware/    # 🟢 Custom middleware
+│       ├── models/        # 🟢 Mongoose models
+│       ├── config.ts      # 🟡 API configuration
+│       └── types/         # 🔴 Auto-generated files (don't edit)
+├── layout.tsx             # Root layout
+└── page.tsx               # Landing page
 ```
 
-### Customizing the Theme
+**Legend**: 🟢 Safe to modify | 🟡 Modify carefully | 🔴 Auto-generated (don't touch)
 
-To customize the theme, modify the color variables in `styles/globals.css`:
+## 🎯 Adding New API Routes
 
-```css
-@theme {
-  /* Light Mode - Background Colors */
-  --color-l-bg-1: #ffffff; /* Your custom color */
-  --color-l-bg-2: #f6f8fa; /* Your custom color */
+### 1. Create Route Structure
 
-  /* Light Mode - Text Colors */
-  --color-l-text-1: #24292f; /* Your custom color */
+```bash
+mkdir app/api/products
+touch app/api/products/route.ts app/api/products/types.ts
+```
 
-  /* Dark Mode Colors */
-  --color-d-bg-1: #0d1117; /* Your custom color */
+### 2. Define Types (`types.ts`)
 
-  /* Accent Colors */
-  --color-accent-1: #58a6ff; /* Your custom color */
-  --color-accent-success: #3fb950; /* Your custom color */
+```typescript
+export class CreateProductDto {
+  name!: string;
+  price!: number;
+  category!: string;
+  description?: string;
+}
 
-  /* Add more custom colors as needed */
+export interface ProductResponseDto {
+  _id: string;
+  name: string;
+  price: number;
+  category: string;
+  description?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 ```
 
-After modifying the theme variables, the Tailwind classes will automatically use your custom colors.
+### 3. Create Route Handler (`route.ts`)
 
-## Dark Mode Implementation
+```typescript
+import { NextRequest, NextResponse } from 'next/server';
+import { withDatabase } from '@/app/lib/api/middleware';
+import { Product } from '@/app/lib/api/models';
 
-This template includes a ready-to-use dark mode implementation:
+export const GET = withDatabase(async () => {
+  const products = await Product.find().sort({ createdAt: -1 });
+  return NextResponse.json({
+    success: true,
+    data: products,
+    count: products.length,
+  });
+});
 
-1. **Theme Toggle Component**: Located at `app/components/ThemeToggle.tsx`, this component provides a button to switch between light and dark modes.
+export const POST = withDatabase(async (req: NextRequest) => {
+  const body = await req.json();
+  const product = new Product(body);
+  const savedProduct = await product.save();
 
-2. **Local Storage**: User preference is saved to local storage so it persists between visits.
-
-3. **System Preference Detection**: The template automatically detects the user's system preference for dark/light mode on first visit.
-
-4. **Implementation Example**:
-
-```jsx
-import ThemeToggle from '@/components/ThemeToggle';
-
-function MyComponent() {
-  return (
-    <div className="bg-l-bg-1 dark:bg-d-bg-1 text-l-text-1 dark:text-d-text-1">
-      <h1>My Component</h1>
-      <ThemeToggle />
-    </div>
+  return NextResponse.json(
+    {
+      success: true,
+      data: savedProduct,
+      message: 'Product created successfully',
+    },
+    { status: 201 }
   );
-}
+});
 ```
 
-## Development Tools
+### 4. Create Database Model (`app/lib/api/models/Product.ts`)
 
-### ESLint Configuration
+```typescript
+import mongoose, { Schema, Document } from 'mongoose';
 
-This template uses ESLint to enforce code quality. The configuration is in `eslint.config.js` (using the new flat config format) and includes:
+export interface IProduct extends Document {
+  name: string;
+  price: number;
+  category: string;
+  description?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
-- Next.js recommended rules
-- TypeScript integration
-- Import order rules
-- React Hooks rules
+const ProductSchema: Schema<IProduct> = new Schema(
+  {
+    name: { type: String, required: true, trim: true },
+    price: { type: Number, required: true, min: 0 },
+    category: { type: String, required: true, trim: true },
+    description: { type: String, trim: true },
+  },
+  { timestamps: true }
+);
 
-To run ESLint:
+export const Product =
+  mongoose.models.Product || mongoose.model<IProduct>('Product', ProductSchema);
+```
+
+### 5. Regenerate Documentation
 
 ```bash
-npm run lint      # Check for issues
-npm run lint:fix  # Fix issues automatically
+npm run api:generate
 ```
 
-### Prettier Configuration
+**Result**: Your new route automatically appears in:
 
-Prettier ensures consistent code formatting. Configuration is in `.prettierrc`:
+- OpenAPI spec at `/api/swagger`
+- Interactive docs at `/api/docs`
+- Generated TypeScript types
 
-```json
-{
-  "singleQuote": true,
-  "semi": true,
-  "tabWidth": 2,
-  "printWidth": 80,
-  "trailingComma": "es5",
-  "arrowParens": "avoid",
-  "endOfLine": "lf"
-}
-```
-
-To run Prettier:
+## 🔧 Available Scripts
 
 ```bash
-npm run format        # Format all files
-npm run format:check  # Check formatting
+npm run dev              # Start development server
+npm run build            # Build for production (includes OpenAPI generation)
+npm run start            # Start production server
+npm run api:generate     # Generate OpenAPI spec, types, and client
+npm run api:watch        # Watch mode for development
+npm run api:dev          # Start dev server + OpenAPI watching
+npm run type-check       # TypeScript type checking
+npm run lint             # ESLint
+npm run lint:fix         # ESLint with auto-fix
+npm run format           # Prettier formatting
+npm run test             # Run all checks (format, lint, type-check)
 ```
 
-### Husky and lint-staged
+## 📖 API Documentation
 
-The template uses Husky to run checks before commits and lint-staged to only check files that are being committed:
+Once running, access your API documentation:
 
-- ESLint and Prettier run on staged JavaScript/TypeScript files
-- Prettier runs on staged JSON and Markdown files
+- **Interactive Docs**: [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
+- **OpenAPI Spec**: [http://localhost:3000/api/swagger](http://localhost:3000/api/swagger)
+- **Health Check**: [http://localhost:3000/api/health](http://localhost:3000/api/health)
 
-This ensures that all committed code meets the project's quality standards.
+## 🔄 Auto-Generation Workflow
 
-## Next.js v15 Specific Features
+The system automatically:
 
-This template comes with the latest Next.js v15 features pre-configured:
+1. **Discovers Routes**: Scans all `app/api/**/route.ts` files
+2. **Extracts Methods**: Finds exported HTTP methods (GET, POST, etc.)
+3. **Reads Types**: Processes co-located `types.ts` files for schemas
+4. **Generates Docs**: Creates comprehensive OpenAPI specification
+5. **Creates Types**: Generates TypeScript types and API client
 
-- **App Router**: Improved routing and layouts with file-based routing
-- **Server Components**: Enhanced performance with React Server Components
-- **Server Actions**: Simplified form handling and mutations
-- **Improved TypeScript Support**: Better type checking and DX
-- **Optimized Images**: Automatic image optimization with next/image
-- **API Routes**: Create API endpoints within your Next.js app
-- **Middleware**: Add custom logic to handle requests before they complete
-- **Incremental Static Regeneration**: Update static pages without rebuilding the entire site
-- **Fast Refresh**: Quick feedback loop during development
+### Generated Files (Auto-updated)
 
-## Deployment
+- `app/lib/api/types/openapi.json` - OpenAPI 3.0 specification
+- `app/lib/api/types/ApiTypes.ts` - TypeScript types
+- `app/lib/api/types/ApiClient.ts` - Type-safe API client
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new) from the creators of Next.js.
+## 🛠️ Tech Stack
 
-Check out the [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details on deployment options.
+- **Framework**: [Next.js 16+](https://nextjs.org/) (App Router)
+- **Language**: TypeScript with ES Modules
+- **Database**: [MongoDB](https://www.mongodb.com/) with [Mongoose](https://mongoosejs.com/)
+- **Documentation**: [OpenAPI 3.0](https://spec.openapis.org/oas/v3.0.3) + [Swagger UI](https://swagger.io/tools/swagger-ui/)
+- **Type Generation**: [openapi-typescript](https://github.com/drwpow/openapi-typescript) + [swagger-typescript-api](https://github.com/acacode/swagger-typescript-api)
+- **Code Quality**: [ESLint](https://eslint.org/) + [Prettier](https://prettier.io/) + [TypeScript](https://www.typescriptlang.org/)
+- **Development**: [Chokidar](https://github.com/paulmillr/chokidar) file watching + [Concurrently](https://github.com/open-cli-tools/concurrently)
+
+## 🚀 Deployment
+
+### Vercel (Recommended)
+
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy
+vercel --prod
+```
+
+### Docker
+
+```bash
+# Build image
+docker build -t nextjs-backend .
+
+# Run container
+docker run -p 3000:3000 nextjs-backend
+```
+
+### Manual Deployment
+
+```bash
+# Build for production
+npm run build
+
+# Start production server
+npm start
+```
+
+## 📚 Additional Resources
+
+- **[Development Guide](app/DEVELOPMENT_GUIDE.md)** - Comprehensive development documentation
+- **[GitHub Copilot Instructions](.github/copilot-instructions.md)** - AI coding assistant setup
+- **[Examples](examples/)** - Common implementation patterns
+- **[Contributing](CONTRIBUTING.md)** - Contribution guidelines
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [Next.js](https://nextjs.org/) team for the amazing framework
+- [Mongoose](https://mongoosejs.com/) for MongoDB integration
+- [OpenAPI](https://www.openapis.org/) specification contributors
+- [Swagger](https://swagger.io/) for API documentation tools
+
+---
+
+**Built with ❤️ by [Yousif Abozid](https://github.com/YousifAbozid)**

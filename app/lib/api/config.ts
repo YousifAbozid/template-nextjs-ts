@@ -60,8 +60,8 @@ export const openApiConfig = {
   paths: {
     output: {
       spec: 'app/lib/api/types/openapi.json',
-      types: 'app/lib/api/types/api-types.ts',
-      client: 'app/lib/api/types/api-client.ts',
+      types: 'app/lib/api/types/ApiTypes.ts',
+      client: 'app/lib/api/types/ApiClient.ts',
     },
   },
 

@@ -8,8 +8,8 @@ import fs from 'fs';
 import path from 'path';
 
 const API_FILES = [
-  'lib/api/types/api-client.ts',
-  'lib/api/types/api-types.ts',
+  'lib/api/types/ApiClient.ts',
+  'lib/api/types/ApiTypes.ts',
   'lib/api/types/openapi.json',
 ];
 

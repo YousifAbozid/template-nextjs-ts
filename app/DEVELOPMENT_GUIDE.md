@@ -316,8 +316,8 @@ The project now includes **dynamic OpenAPI generation** that automatically disco
 ### Generated Files (🔴 Don't Touch)
 
 - `app/lib/api/types/openapi.json` - Complete OpenAPI 3.0 specification with all discovered routes
-- `app/lib/api/types/api-types.ts` - TypeScript types for all endpoints and schemas
-- `app/lib/api/types/api-client.ts` - Auto-generated API client with type safety
+- `app/lib/api/types/ApiTypes.ts` - TypeScript types for all endpoints and schemas
+- `app/lib/api/types/ApiClient.ts` - Auto-generated API client with type safety
 
 ### Manual Generation
 
@@ -417,7 +417,7 @@ curl http://localhost:3000/api/health?detailed=true
 
 ```typescript
 // Don't modify generated files
-// ❌ app/lib/api/types/api-types.ts - This gets overwritten!
+// ❌ app/lib/api/types/ApiTypes.ts - This gets overwritten!
 
 // Don't put route-specific types in shared locations
 // ❌ app/lib/api/dto/user-specific-types.ts
@@ -495,7 +495,8 @@ import { connectDB } from '@/app/lib/api/database';
 - Routes: `route.ts`
 - Types: `types.ts`
 - Models: `PascalCase.ts` (e.g., `User.ts`, `Product.ts`)
-- Middleware: `kebab-case.ts` (e.g., `database.ts`, `auth.ts`)
+- Library files: `PascalCase.ts` (e.g., `ApiProperty.ts`, `ApiTypes.ts`)
+- Middleware: `database.ts`, `auth.ts` (lowercase for core functionality)
 
 ---
 
