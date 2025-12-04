@@ -1,49 +1,53 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import useLocalStorage from 'use-local-storage';
+import { Moon, Sun, Monitor } from 'lucide-react';
+import { useTheme } from '../context/ThemeProvider';
+import { Button } from './ui/Button';
+import { motion } from 'framer-motion';
 
-const ThemeToggle = () => {
-  // Set initial theme based on localStorage, falling back to 'light'
-  const [darkMode, setDarkMode] = useLocalStorage('theme', 'light');
-  // Track if component is mounted
-  const [mounted, setMounted] = useState(false);
+export default function ThemeToggle() {
+  const { theme, setTheme } = useTheme();
 
-  useEffect(() => {
-    // Mark component as mounted
-    setMounted(true);
-
-    // Check system preference and update if no existing preference
-    const defaultDark = window.matchMedia(
-      '(prefers-color-scheme: dark)'
-    ).matches;
-    if (!localStorage.getItem('theme')) {
-      setDarkMode(defaultDark ? 'dark' : 'light');
-    }
-
-    // Apply theme
-    if (darkMode === 'dark') {
-      document.documentElement.classList.add('dark');
+  const cycleTheme = () => {
+    if (theme === 'light') {
+      setTheme('dark');
+    } else if (theme === 'dark') {
+      setTheme('system');
     } else {
-      document.documentElement.classList.remove('dark');
+      setTheme('light');
     }
-  }, [darkMode, setDarkMode]);
+  };
 
-  // Prevent flash of incorrect theme by not rendering until mounted
-  if (!mounted) {
-    return null;
-  }
+  const getIcon = () => {
+    switch (theme) {
+      case 'light':
+        return <Sun className="h-4 w-4" />;
+      case 'dark':
+        return <Moon className="h-4 w-4" />;
+      case 'system':
+        return <Monitor className="h-4 w-4" />;
+      default:
+        return <Monitor className="h-4 w-4" />;
+    }
+  };
 
   return (
-    <button
-      onClick={() => {
-        setDarkMode(darkMode === 'dark' ? 'light' : 'dark');
-      }}
-      className="p-2 rounded-md bg-gray-200 dark:bg-gray-800 dark:text-white"
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={cycleTheme}
+      className="relative"
     >
-      {darkMode === 'dark' ? '🌙 Dark Mode' : '☀️ Light Mode'}
-    </button>
+      <motion.div
+        key={theme}
+        initial={{ rotate: -180, opacity: 0 }}
+        animate={{ rotate: 0, opacity: 1 }}
+        exit={{ rotate: 180, opacity: 0 }}
+        transition={{ duration: 0.2 }}
+      >
+        {getIcon()}
+      </motion.div>
+      <span className="sr-only">Toggle theme</span>
+    </Button>
   );
-};
-
-export default ThemeToggle;
+}
