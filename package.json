@@ -21,6 +21,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "npm run api:generate && next build",
+    "build:frontend": "next build",
     "start": "next start",
     "type-check": "tsc --noEmit",
     "lint": "eslint app --cache --cache-location .eslintcache",

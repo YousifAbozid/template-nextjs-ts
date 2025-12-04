@@ -20,7 +20,14 @@
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./app/*"],
+      "@/components/*": ["./app/components/*"],
+      "@/context/*": ["./app/context/*"],
+      "@/lib/*": ["./app/lib/*"],
+      "@/hooks/*": ["./app/hooks/*"],
+      "@/types/*": ["./app/types/*"],
+      "@/api/*": ["./app/api/*"],
+      "@/utils/*": ["./app/utils/*"]
     },
     "plugins": [
       {

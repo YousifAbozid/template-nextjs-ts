@@ -1,7 +1,7 @@
 'use client';
 
 import { Moon, Sun, Monitor } from 'lucide-react';
-import { useTheme } from '../context/ThemeProvider';
+import { useTheme } from '@/context/ThemeProvider';
 import { Button } from './ui/Button';
 import { motion } from 'framer-motion';
 

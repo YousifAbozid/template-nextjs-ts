@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { withDatabase } from '@/app/lib/api/middleware';
-import { User } from '@/app/lib/api/models';
+import { withDatabase } from '@/lib/api/middleware';
+import { User } from '@/lib/api/models';
 
 /**
  * Get all users

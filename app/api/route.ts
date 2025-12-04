@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { ApiProperty } from '@/app/lib/api/decorators';
+import { ApiProperty } from '@/lib/api/decorators';
 
 /**
  * API Information DTO

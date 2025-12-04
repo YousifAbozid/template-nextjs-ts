@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { checkDatabaseHealth } from '@/app/lib/api/database';
+import { checkDatabaseHealth } from '@/lib/api/database';
 import {
   HealthStatus,
   type ComponentHealth,
