@@ -1,9 +1,22 @@
+#!/bin/sh
 echo "🔍 Running pre-commit hooks..."
 
-# Run lint-staged with stricter settings
-npx lint-staged --verbose --no-stash || {
-  echo "❌ lint-staged failed. Please fix the issues above and try committing again."
+# Check if there are staged files
+STAGED_FILES=$(git diff --cached --name-only)
+if [ -z "$STAGED_FILES" ]; then
+  echo "⚠️  No staged files found. Skipping pre-commit checks."
+  exit 0
+fi
+
+# Run lint-staged with better error handling
+echo "📝 Running lint-staged on staged files..."
+npx lint-staged --verbose || {
+  echo "❌ lint-staged failed. Issues found:"
+  echo "   • ESLint or Prettier errors in staged files"
+  echo "   • Please fix the issues above and try committing again."
+  echo "   • You can run 'npm run fix' to auto-fix some issues"
   exit 1
 }
 
 echo "✅ Pre-commit checks passed!"
+echo "🎉 Ready to commit!"

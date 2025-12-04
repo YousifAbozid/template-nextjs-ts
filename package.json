@@ -1,55 +1,73 @@
 {
   "name": "template-nextjs-ts",
   "version": "1.0.0",
-  "description": "A modern template for Next.js v15 with TypeScript, Tailwind CSS v4, dark mode, and comprehensive tooling including ESLint, Prettier, and Husky",
   "private": true,
+  "description": "✨ Next.js 16+ full stack template with MongoDB, dynamic OpenAPI generation, and type-safe auto-documentation. Features route-centric architecture with co-located types and zero-configuration API discovery. 🚀",
+  "homepage": "https://github.com/YousifAbozid/template-nextjs-ts#readme",
+  "bugs": {
+    "url": "https://github.com/YousifAbozid/template-nextjs-ts/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YousifAbozid/template-nextjs-ts.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Yousif Abozid",
+    "email": "yousif.abozid@yahoo.com",
+    "url": "https://github.com/YousifAbozid"
+  },
+  "type": "module",
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "tsc -b && next build",
+    "dev": "next dev",
+    "build": "npm run api:generate && next build",
     "start": "next start",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx app",
-    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx app --fix",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint app --cache --cache-location .eslintcache",
+    "lint:fix": "eslint app --fix --cache --cache-location .eslintcache",
+    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md,yml,yaml}\"",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
-    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "fix-all": "npm run lint:fix && npm run format",
-    "type-check": "tsc --noEmit --incremental",
+    "test": "npm run format:check && npm run lint && npm run type-check",
     "upgrade": "npx npm-check-updates -u && npm install",
-    "prepare": "husky"
+    "prepare": "husky",
+    "api:generate": "node scripts/generate-openapi.js",
+    "api:watch": "node scripts/watch-openapi.js",
+    "api:dev": "concurrently \"npm run dev\" \"npm run api:watch\""
   },
   "dependencies": {
-    "@tailwindcss/postcss": "^4.1.17",
-    "next": "16.0.5",
-    "postcss": "^8.5.6",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "tailwindcss": "^4.1.17",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.3",
+    "mongoose": "^9.0.0",
+    "next": "16.0.7",
+    "react": "19.2.1",
+    "react-dom": "19.2.1",
+    "reflect-metadata": "^0.2.2",
     "use-local-storage": "^3.0.0"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.3",
-    "@eslint/js": "^9.39.1",
-    "@next/eslint-plugin-next": "^16.0.5",
+    "@tailwindcss/postcss": "^4.1.17",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
+    "chokidar": "^5.0.0",
+    "concurrently": "^9.2.1",
     "eslint": "^9.39.1",
-    "eslint-config-next": "^16.0.5",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.4",
-    "eslint-plugin-react": "^7.37.5",
-    "globals": "^16.5.0",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.2.7",
-    "prettier": "^3.7.3",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.48.0"
+    "eslint-config-next": "16.0.7",
+    "husky": "9.1.7",
+    "lint-staged": "16.2.7",
+    "openapi-typescript": "^7.10.1",
+    "prettier": "3.7.4",
+    "swagger-typescript-api": "^13.2.16",
+    "tailwindcss": "^4.1.17",
+    "typescript": "^5.9.3"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
+      "eslint --fix --cache --cache-location .eslintcache --no-warn-ignored",
       "prettier --write"
     ],
-    "*.{json,md}": [
+    "*.{css,scss,less}": [
       "prettier --write"
     ]
   }

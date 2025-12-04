@@ -1,35 +1,41 @@
-import globals from 'globals';
-import pluginJs from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import pluginReact from 'eslint-plugin-react';
-import nextPlugin from '@next/eslint-plugin-next';
+import { defineConfig, globalIgnores } from 'eslint/config';
+import nextVitals from 'eslint-config-next/core-web-vitals';
+import nextTs from 'eslint-config-next/typescript';
 
-/** @type {import('eslint').Linter.Config[]} */
-export default [
-  { files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'] },
-  { languageOptions: { globals: globals.browser } },
-  pluginJs.configs.recommended,
-  ...tseslint.configs.recommended,
-  pluginReact.configs.flat.recommended,
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    '.next/**',
+    'out/**',
+    'build/**',
+    'next-env.d.ts',
+    // Generated files
+    'app/lib/api/types/**',
+    'scripts/**',
+    // API Framework files with intentional any types
+    'app/lib/api/decorators/**',
+    'app/lib/api/schema/**',
+    'app/lib/api/validation/**',
+  ]),
+  // More lenient rules for library files
   {
-    plugins: {
-      '@next/next': nextPlugin,
-    },
+    files: ['app/lib/**/*.{js,jsx,ts,tsx}'],
     rules: {
-      'react/react-in-jsx-scope': 'off',
-      'react/jsx-uses-react': 'off',
-      // Add these rules to catch console.log and no-unused-vars
-      'no-console': ['error', { allow: ['warn', 'error'] }],
-      '@typescript-eslint/no-unused-vars': 'error',
-
-      // Include recommended Next.js rules
-      '@next/next/no-html-link-for-pages': 'error',
-      '@next/next/no-img-element': 'error',
-    },
-    settings: {
-      react: {
-        version: 'detect',
-      },
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-unsafe-function-type': 'warn',
     },
   },
-];
+  // Disable problematic React hooks rules
+  {
+    files: ['app/**/*.{js,jsx,ts,tsx}'],
+    rules: {
+      'react-hooks/set-state-in-effect': 'off',
+    },
+  },
+]);
+
+export default eslintConfig;

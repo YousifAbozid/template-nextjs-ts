@@ -1,0 +1,20 @@
+#!/bin/sh
+echo "🚀 Running pre-push checks..."
+
+# Check if any source files changed since last push
+CHANGED_FILES=$(git diff --name-only @{push}..HEAD 2>/dev/null || git diff --name-only HEAD~1..HEAD)
+SOURCE_CHANGED=$(echo "$CHANGED_FILES" | grep -E '\.(js|jsx|ts|tsx|json)$' | grep -v 'src/types/api.ts' | grep -v 'src/types/client.ts' | grep -v 'src/openapi.json' || true)
+
+if [ -z "$SOURCE_CHANGED" ]; then
+  echo "📦 No source files changed, skipping checks"
+  exit 0
+fi
+
+echo "📦 Source files changed, running full codebase checks..."
+
+# Run the pre-push validation script
+node scripts/pre-push-check.js
+if [ $? -ne 0 ]; then
+  echo "❌ Pre-push checks failed! Please fix the issues above."
+  exit 1
+fi
