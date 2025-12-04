@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 // Get encryption secret from environment variables
 // Falls back to a default value if the env var is not available (development only)
 const ENCRYPTION_SECRET: string =
-  (import.meta.env.VITE_ENCRYPTION_SECRET as string | undefined) ||
+  process.env.NEXT_PUBLIC_ENCRYPTION_SECRET ||
   'dev-fallback-key-not-for-production';
 
 /**
