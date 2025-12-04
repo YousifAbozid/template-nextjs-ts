@@ -1,8 +1,8 @@
 {
-  "name": "template-nextjs-fullstack",
-  "version": "2.0.0",
+  "name": "template-nextjs-ts",
+  "version": "1.0.0",
   "private": true,
-  "description": "🚀 Production-ready Next.js 15+ full-stack template with TypeScript, MongoDB, Tailwind CSS v4, and comprehensive tooling. Features auto-generated OpenAPI documentation, type-safe API client, React Query integration, dark mode support, custom UI components with Framer Motion, form validation with Zod, and complete developer experience with ESLint, Prettier, and Husky. Perfect for building scalable web applications with modern architecture patterns. ✨",
+  "description": "🚀 Production-ready Next.js 16+ full-stack template with TypeScript, MongoDB, Tailwind CSS v4, and comprehensive tooling. Features auto-generated OpenAPI documentation, type-safe API client, React Query integration, dark mode support, custom UI components with Framer Motion, form validation with Zod, and complete developer experience with ESLint, Prettier, and Husky. Perfect for building scalable web applications with modern architecture patterns. ✨",
   "homepage": "https://github.com/YousifAbozid/template-nextjs-ts#readme",
   "bugs": {
     "url": "https://github.com/YousifAbozid/template-nextjs-ts/issues"

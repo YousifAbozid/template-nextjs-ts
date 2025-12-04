@@ -1,6 +1,6 @@
-# 🚀 Next.js Backend Template
+# 🚀 Next.js Full-Stack Template
 
-A production-ready Next.js 16+ API backend template with MongoDB integration, dynamic OpenAPI generation, and automatic type-safe documentation.
+A production-ready Next.js 16+ full-stack template with TypeScript, MongoDB, Tailwind CSS v4, and comprehensive tooling. Features auto-generated OpenAPI documentation, type-safe API client, React Query integration, dark mode support, custom UI components with Framer Motion, form validation with Zod, and complete developer experience.
 
 ## ✨ Features
 
@@ -18,6 +18,14 @@ A production-ready Next.js 16+ API backend template with MongoDB integration, dy
 - **Connection Caching**: Optimized for serverless environments
 - **Middleware Pattern**: `withDatabase` wrapper for seamless DB connections
 - **Model Organization**: Clean separation of concerns with organized models
+
+### 🎨 **Frontend Components**
+
+- **Modern UI Library**: Comprehensive component system with Tailwind CSS v4
+- **Dark Mode Support**: Built-in theme switching with CSS custom properties
+- **Framer Motion**: Smooth animations and page transitions
+- **Form Validation**: Type-safe forms with react-hook-form + Zod
+- **State Management**: React Query for server state, React hooks for client state
 
 ### 🔧 **Developer Experience**
 
@@ -38,8 +46,8 @@ A production-ready Next.js 16+ API backend template with MongoDB integration, dy
 
 ```bash
 # Clone the template
-git clone https://github.com/YousifAbozid/template-nextjs-backend.git
-cd template-nextjs-backend
+git clone https://github.com/YousifAbozid/template-nextjs-ts.git
+cd template-nextjs-ts
 
 # Install dependencies
 npm install
@@ -76,15 +84,24 @@ app/
 │   ├── health/            # Health check endpoint
 │   ├── docs/              # Swagger UI documentation
 │   └── swagger/           # OpenAPI specification endpoint
+├── components/            # 🟢 React components
+│   ├── ui/                # Base UI components (Button, Card, etc.)
+│   └── shared/            # Shared business components
+├── context/               # 🟢 React context providers
+│   ├── Providers.tsx      # App-level providers
+│   ├── ThemeProvider.tsx  # Dark/light mode
+│   └── ToastContext.tsx   # Toast notifications
 ├── lib/                   # Shared utilities and business logic
-│   └── api/
-│       ├── database/      # 🟢 Database connection utilities
-│       ├── middleware/    # 🟢 Custom middleware
-│       ├── models/        # 🟢 Mongoose models
-│       ├── config.ts      # 🟡 API configuration
-│       └── types/         # 🔴 Auto-generated files (don't edit)
-├── layout.tsx             # Root layout
-└── page.tsx               # Landing page
+│   ├── api/
+│   │   ├── database/      # 🟢 Database connection utilities
+│   │   ├── middleware/    # 🟢 Custom middleware
+│   │   ├── models/        # 🟢 Mongoose models
+│   │   ├── config.ts      # 🟡 API configuration
+│   │   └── types/         # 🔴 Auto-generated files (don't edit)
+│   └── network/           # 🟢 React Query configuration
+├── layout.tsx             # Root layout with providers
+├── page.tsx               # Landing page with component showcase
+└── globals.css            # Global styles with CSS custom properties
 ```
 
 **Legend**: 🟢 Safe to modify | 🟡 Modify carefully | 🔴 Auto-generated (don't touch)
@@ -191,6 +208,60 @@ npm run api:generate
 - Interactive docs at `/api/docs`
 - Generated TypeScript types
 
+## 🎨 Frontend Development
+
+### Using UI Components
+
+```typescript
+import { Button } from '@/components/ui/Button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import { useToast } from '@/context/ToastContext';
+
+export function ExampleComponent() {
+  const { showToast } = useToast();
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Example Component</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Button
+          onClick={() => showToast('Success!', 'success')}
+          variant="default"
+        >
+          Click me
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+```
+
+### API Integration with React Query
+
+```typescript
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
+// Using auto-generated API client
+export function UsersList() {
+  const { data: users, isLoading } = useQuery({
+    queryKey: ['users'],
+    queryFn: () => fetch('/api/users').then(res => res.json()),
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+
+  return (
+    <div>
+      {users?.data.map(user => (
+        <div key={user._id}>{user.name}</div>
+      ))}
+    </div>
+  );
+}
+```
+
 ## 🔧 Available Scripts
 
 ```bash
@@ -209,8 +280,9 @@ npm run test             # Run all checks (format, lint, type-check)
 
 ## 📖 API Documentation
 
-Once running, access your API documentation:
+Once running, access your documentation and app:
 
+- **Frontend App**: [http://localhost:3000](http://localhost:3000) (Landing page with component showcase)
 - **Interactive Docs**: [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
 - **OpenAPI Spec**: [http://localhost:3000/api/swagger](http://localhost:3000/api/swagger)
 - **Health Check**: [http://localhost:3000/api/health](http://localhost:3000/api/health)
@@ -233,12 +305,26 @@ The system automatically:
 
 ## 🛠️ Tech Stack
 
-- **Framework**: [Next.js 16+](https://nextjs.org/) (App Router)
+### Frontend
+
+- **Framework**: [Next.js 16+](https://nextjs.org/) (App Router) + [React 19](https://react.dev/)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) with CSS custom properties
+- **Components**: Custom UI library with [Framer Motion](https://www.framer.com/motion/)
+- **State Management**: [React Query](https://tanstack.com/query) + React hooks
+- **Forms**: [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+
+### Backend
+
 - **Language**: TypeScript with ES Modules
 - **Database**: [MongoDB](https://www.mongodb.com/) with [Mongoose](https://mongoosejs.com/)
 - **Documentation**: [OpenAPI 3.0](https://spec.openapis.org/oas/v3.0.3) + [Swagger UI](https://swagger.io/tools/swagger-ui/)
-- **Type Generation**: [openapi-typescript](https://github.com/drwpow/openapi-typescript) + [swagger-typescript-api](https://github.com/acacode/swagger-typescript-api)
+- **Type Generation**: Auto-generated TypeScript types and API client
+
+### Developer Tools
+
 - **Code Quality**: [ESLint](https://eslint.org/) + [Prettier](https://prettier.io/) + [TypeScript](https://www.typescriptlang.org/)
+- **Git Hooks**: [Husky](https://typicode.github.io/husky/) + [lint-staged](https://github.com/okonet/lint-staged)
 - **Development**: [Chokidar](https://github.com/paulmillr/chokidar) file watching + [Concurrently](https://github.com/open-cli-tools/concurrently)
 
 ## 🚀 Deployment
