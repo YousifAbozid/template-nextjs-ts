@@ -29,7 +29,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
     <motion.div
       ref={ref}
       role="alert"
-      className={[getAlertClasses(variant), className]
+      className={[getAlertClasses(variant), 'flex gap-3', className]
         .filter(Boolean)
         .join(' ')}
       initial={{ opacity: 0, y: -10 }}
@@ -47,7 +47,7 @@ const AlertTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <h5
     ref={ref}
-    className={['mb-1 font-medium leading-none tracking-tight', className]
+    className={['font-medium leading-none tracking-tight', className]
       .filter(Boolean)
       .join(' ')}
     {...props}
@@ -61,9 +61,7 @@ const AlertDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={['text-sm [&_p]:leading-relaxed', className]
-      .filter(Boolean)
-      .join(' ')}
+    className={['text-sm leading-relaxed', className].filter(Boolean).join(' ')}
     {...props}
   />
 ));

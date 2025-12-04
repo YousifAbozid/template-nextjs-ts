@@ -447,19 +447,23 @@ export default function Home() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <Alert variant="success">
-                  <Check className="h-4 w-4" />
-                  <AlertTitle>Success!</AlertTitle>
-                  <AlertDescription>
-                    Your changes have been saved successfully.
-                  </AlertDescription>
+                  <Check className="h-4 w-4 shrink-0 mt-0.5" />
+                  <div className="flex-1 space-y-1">
+                    <AlertTitle>Success!</AlertTitle>
+                    <AlertDescription>
+                      Your changes have been saved successfully.
+                    </AlertDescription>
+                  </div>
                 </Alert>
 
                 <Alert variant="warning">
-                  <AlertTriangle className="h-4 w-4" />
-                  <AlertTitle>Warning</AlertTitle>
-                  <AlertDescription>
-                    Please review your input before proceeding.
-                  </AlertDescription>
+                  <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+                  <div className="flex-1 space-y-1">
+                    <AlertTitle>Warning</AlertTitle>
+                    <AlertDescription>
+                      Please review your input before proceeding.
+                    </AlertDescription>
+                  </div>
                 </Alert>
               </CardContent>
             </Card>
