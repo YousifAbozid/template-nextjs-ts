@@ -20,10 +20,10 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "npm run api:generate && next build",
-    "build:frontend": "next build",
+    "build": "npm run api:generate && npm run api:type-check && next build",
     "start": "next start",
     "type-check": "tsc --noEmit",
+    "api:type-check": "tsc -p tsconfig.generated.json --noEmit",
     "lint": "eslint app --cache --cache-location .eslintcache",
     "lint:fix": "eslint app --fix --cache --cache-location .eslintcache",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md,yml,yaml}\"",

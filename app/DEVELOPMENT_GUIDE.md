@@ -85,8 +85,8 @@ export interface UpdateProductDto {
 
 ```typescript
 import { NextRequest, NextResponse } from 'next/server';
-import { withDatabase } from '@/app/lib/api/middleware';
-import { Product } from '@/app/lib/api/models';
+import { withDatabase } from '@/lib/api/middleware';
+import { Product } from '@/lib/api/models';
 import type { CreateProductDto } from './types';
 
 /**
@@ -206,7 +206,7 @@ export { default as Product, type IProduct } from './Product';
 ### Database Middleware (Already Available)
 
 ```typescript
-import { withDatabase } from '@/app/lib/api/middleware';
+import { withDatabase } from '@/lib/api/middleware';
 
 // Automatically connects to MongoDB before handling request
 export const GET = withDatabase(async () => {
@@ -455,7 +455,7 @@ curl http://localhost:3000/api/health?detailed=true
 
 - Check if you modified any 🔴 files accidentally
 - Run `npm run api:generate` to regenerate types
-- Verify import paths use `@/app/lib/` not `@/lib/`
+- Verify import paths use `@/lib/` not relative paths
 
 ### Database Issues
 
@@ -480,14 +480,14 @@ npm run api:generate # Generate API docs/types
 
 ```typescript
 // Database & Models
-import { withDatabase } from '@/app/lib/api/middleware';
-import { User, Product } from '@/app/lib/api/models';
+import { withDatabase } from '@/lib/api/middleware';
+import { User, Product } from '@/lib/api/models';
 
 // Route-specific types
 import type { CreateUserDto } from './types';
 
 // Database utilities
-import { connectDB } from '@/app/lib/api/database';
+import { connectDB } from '@/lib/api/database';
 ```
 
 ### File Naming Conventions

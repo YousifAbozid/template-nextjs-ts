@@ -22,8 +22,8 @@ app/api/[resource]/
 
 ```typescript
 // Every route handler MUST use withDatabase middleware
-import { withDatabase } from '@/app/lib/api/middleware';
-import { User } from '@/app/lib/api/models';
+import { withDatabase } from '@/lib/api/middleware';
+import { User } from '@/lib/api/models';
 
 export const GET = withDatabase(async () => {
   const users = await User.find();
@@ -125,7 +125,7 @@ return NextResponse.json(
 ### Core Middleware
 
 - `app/lib/api/middleware/database.ts` - Connection management
-- Import path: `@/app/lib/api/middleware`
+- Import path: `@/lib/api/middleware`
 
 ### Generation Scripts
 
@@ -143,7 +143,7 @@ return NextResponse.json(
 ## Common Gotchas
 
 - **Mongoose models**: Always check `mongoose.models.ModelName` before creating
-- **Import paths**: Use `@/app/lib/` not relative paths
+- **Import paths**: Use `@/lib/` not relative paths
 - **Type exports**: Must use `export` keyword for OpenAPI discovery
 - **Route names**: Directory name becomes OpenAPI tag (`users` → `Users`)
 - **Build order**: Generation runs before Next.js build, not after
