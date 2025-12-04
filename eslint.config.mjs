@@ -50,9 +50,10 @@ export default defineConfig([
     files: ['app/**/*.{ts,tsx}'],
     rules: {
       'react-hooks/exhaustive-deps': 'warn',
-      "react-hooks/set-state-in-effect": "off",
+      'react-hooks/set-state-in-effect': 'off',
       'no-console': 'off',
       '@next/next/no-img-element': 'off',
+      '@typescript-eslint/no-empty-object-type': 'off',
     },
   },
 ]);

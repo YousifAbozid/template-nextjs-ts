@@ -39,6 +39,21 @@ import { Badge } from '@/components/ui/Badge';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/Alert';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
+import { Textarea } from '@/components/ui/Textarea';
+import { Select, SelectOption } from '@/components/ui/Select';
+import { Checkbox } from '@/components/ui/Checkbox';
+import { Radio } from '@/components/ui/Radio';
+import { Switch } from '@/components/ui/Switch';
+import { Separator } from '@/components/ui/Separator';
+import { Skeleton } from '@/components/ui/Skeleton';
+import { Progress } from '@/components/ui/Progress';
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+} from '@/components/ui/Drawer';
 import {
   Dialog,
   DialogContent,
@@ -125,6 +140,8 @@ type FormData = z.infer<typeof formSchema>;
 
 export default function Home() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [progress, setProgress] = useState(65);
   const { notify } = useToast();
 
   const form = useForm<FormData>({
@@ -163,7 +180,7 @@ export default function Home() {
       );
       setIsDialogOpen(false);
       reset();
-    } catch (error) {
+    } catch {
       notify('error', 'Something went wrong. Please try again.');
     }
   };
@@ -179,7 +196,7 @@ export default function Home() {
     <div className="min-h-screen bg-background-primary">
       {/* Hero Section */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-accent-primary/10 to-accent-secondary/10"></div>
+        <div className="absolute inset-0 bg-linear-to-br from-accent-primary/10 to-accent-secondary/10"></div>
         <div className="relative container mx-auto px-4 py-16 sm:py-24">
           <div className="flex justify-end mb-8">
             <ThemeToggle />
@@ -465,6 +482,107 @@ export default function Home() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Form Inputs */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Form Controls</CardTitle>
+                <CardDescription>
+                  Complete set of form inputs with validation support
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Select</Label>
+                    <Select defaultValue="option2">
+                      <SelectOption value="option1">Option 1</SelectOption>
+                      <SelectOption value="option2">Option 2</SelectOption>
+                      <SelectOption value="option3">Option 3</SelectOption>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Textarea</Label>
+                    <Textarea placeholder="Enter your message..." rows={3} />
+                  </div>
+                </div>
+
+                <Separator />
+
+                <div className="space-y-3">
+                  <Checkbox
+                    label="Accept terms and conditions"
+                    defaultChecked
+                  />
+                  <div className="space-y-2">
+                    <Label>Choose option:</Label>
+                    <div className="space-y-2">
+                      <Radio name="demo" label="Option A" value="a" />
+                      <Radio
+                        name="demo"
+                        label="Option B"
+                        value="b"
+                        defaultChecked
+                      />
+                    </div>
+                  </div>
+                  <Switch label="Enable notifications" defaultChecked />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Progress & Feedback */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Progress & Loading</CardTitle>
+                <CardDescription>
+                  Progress bars, skeletons, and loading states
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Progress: {progress}%</Label>
+                  <Progress value={progress} />
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setProgress(Math.max(0, progress - 10))}
+                      className="cursor-pointer"
+                    >
+                      Decrease
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setProgress(Math.min(100, progress + 10))}
+                      className="cursor-pointer"
+                    >
+                      Increase
+                    </Button>
+                  </div>
+                </div>
+
+                <Separator />
+
+                <div className="space-y-2">
+                  <Label>Loading Skeletons</Label>
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-[250px]" />
+                    <Skeleton className="h-4 w-[200px]" />
+                    <Skeleton className="h-4 w-[150px]" />
+                  </div>
+                </div>
+
+                <Button
+                  variant="outline"
+                  onClick={() => setIsDrawerOpen(true)}
+                  className="cursor-pointer w-full"
+                >
+                  Open Drawer Demo
+                </Button>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
@@ -551,7 +669,10 @@ export default function Home() {
 
       {/* Demo Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={handleDialogClose}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent
+          className="sm:max-w-md"
+          onClose={() => handleDialogClose(false)}
+        >
           <DialogHeader>
             <DialogTitle>Demo Form</DialogTitle>
             <DialogDescription>
@@ -620,6 +741,88 @@ export default function Home() {
           </form>
         </DialogContent>
       </Dialog>
+
+      {/* Drawer Demo */}
+      <Drawer
+        open={isDrawerOpen}
+        onOpenChange={setIsDrawerOpen}
+        side="right"
+        size="md"
+      >
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>Drawer Example</DrawerTitle>
+            <DrawerDescription>
+              This is a demonstration of the Drawer component with various
+              content types.
+            </DrawerDescription>
+          </DrawerHeader>
+
+          <div className="space-y-6">
+            <div className="space-y-3">
+              <h3 className="font-medium text-text-primary">Quick Settings</h3>
+              <div className="space-y-3">
+                <Switch label="Enable dark mode" />
+                <Switch label="Email notifications" defaultChecked />
+                <Switch label="Push notifications" />
+              </div>
+            </div>
+
+            <Separator />
+
+            <div className="space-y-3">
+              <h3 className="font-medium text-text-primary">Preferences</h3>
+              <div className="space-y-2">
+                <Label>Language</Label>
+                <Select defaultValue="en">
+                  <SelectOption value="en">English</SelectOption>
+                  <SelectOption value="es">Spanish</SelectOption>
+                  <SelectOption value="fr">French</SelectOption>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Theme</Label>
+                <div className="space-y-2">
+                  <Radio
+                    name="theme"
+                    label="System"
+                    value="system"
+                    defaultChecked
+                  />
+                  <Radio name="theme" label="Light" value="light" />
+                  <Radio name="theme" label="Dark" value="dark" />
+                </div>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div className="space-y-3">
+              <h3 className="font-medium text-text-primary">
+                Progress Example
+              </h3>
+              <div className="space-y-2">
+                <Progress value={25} variant="success" size="sm" />
+                <Progress value={50} variant="warning" size="md" />
+                <Progress value={75} variant="error" size="lg" />
+              </div>
+            </div>
+
+            <div className="pt-4">
+              <Button
+                onClick={() => {
+                  notify('success', 'Drawer settings saved!');
+                  setIsDrawerOpen(false);
+                }}
+                className="w-full cursor-pointer"
+              >
+                Save Settings
+              </Button>
+            </div>
+          </div>
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 }
