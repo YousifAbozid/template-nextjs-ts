@@ -16,39 +16,39 @@ const Drawer: React.FC<DrawerProps> = ({
   onOpenChange,
   children,
   side = 'right',
-  size = 'md',
+  size = 'md'
 }) => {
   const sizeClasses = {
     sm: side === 'left' || side === 'right' ? 'w-80' : 'h-80',
     md: side === 'left' || side === 'right' ? 'w-96' : 'h-96',
     lg: side === 'left' || side === 'right' ? 'w-[32rem]' : 'h-[32rem]',
-    xl: side === 'left' || side === 'right' ? 'w-[40rem]' : 'h-[40rem]',
+    xl: side === 'left' || side === 'right' ? 'w-[40rem]' : 'h-[40rem]'
   };
 
   const slideVariants = {
     left: {
       hidden: { x: '-100%' },
-      visible: { x: 0 },
+      visible: { x: 0 }
     },
     right: {
       hidden: { x: '100%' },
-      visible: { x: 0 },
+      visible: { x: 0 }
     },
     top: {
       hidden: { y: '-100%' },
-      visible: { y: 0 },
+      visible: { y: 0 }
     },
     bottom: {
       hidden: { y: '100%' },
-      visible: { y: 0 },
-    },
+      visible: { y: 0 }
+    }
   };
 
   const positionClasses = {
     left: 'left-0 top-0 h-full',
     right: 'right-0 top-0 h-full',
     top: 'top-0 left-0 w-full',
-    bottom: 'bottom-0 left-0 w-full',
+    bottom: 'bottom-0 left-0 w-full'
   };
 
   return (

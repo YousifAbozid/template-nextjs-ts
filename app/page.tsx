@@ -24,7 +24,7 @@ import {
   Settings,
   Users,
   BarChart3,
-  Layout,
+  Layout
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/Button';
@@ -33,7 +33,7 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/Alert';
@@ -52,7 +52,7 @@ import {
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
-  DrawerDescription,
+  DrawerDescription
 } from '@/components/ui/Drawer';
 import {
   Dialog,
@@ -60,7 +60,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
+  DialogTitle
 } from '@/components/ui/Dialog';
 import { useToast } from '@/context/ToastContext';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -71,43 +71,43 @@ const features = [
     title: 'Auto-Generated APIs',
     description:
       'Type-safe OpenAPI with automatic documentation and client generation',
-    color: 'text-accent-primary',
+    color: 'text-accent-primary'
   },
   {
     icon: Database,
     title: 'MongoDB Integration',
     description:
       'Mongoose models with validation and comprehensive database operations',
-    color: 'text-accent-success',
+    color: 'text-accent-success'
   },
   {
     icon: Palette,
     title: 'Modern UI System',
     description:
       'Tailwind CSS v4 with dark mode and animated components using Framer Motion',
-    color: 'text-accent-warning',
+    color: 'text-accent-warning'
   },
   {
     icon: Shield,
     title: 'Type Safety',
     description:
       'End-to-end TypeScript with Zod validation and React Hook Form',
-    color: 'text-accent-error',
+    color: 'text-accent-error'
   },
   {
     icon: Zap,
     title: 'Developer Experience',
     description:
       'ESLint, Prettier, Husky, and hot reload for optimal development workflow',
-    color: 'text-accent-info',
+    color: 'text-accent-info'
   },
   {
     icon: Globe,
     title: 'Production Ready',
     description:
       'Optimized builds, error boundaries, and deployment configurations',
-    color: 'text-accent-primary',
-  },
+    color: 'text-accent-primary'
+  }
 ];
 
 const techStack = [
@@ -120,7 +120,7 @@ const techStack = [
   'Zod',
   'React Hook Form',
   'ESLint',
-  'Prettier',
+  'Prettier'
 ];
 
 // Form validation schema
@@ -133,7 +133,7 @@ const formSchema = z.object({
   email: z
     .string()
     .min(1, 'Email is required')
-    .email('Please enter a valid email address'),
+    .email('Please enter a valid email address')
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -148,15 +148,15 @@ export default function Home() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
-      email: '',
-    },
+      email: ''
+    }
   });
 
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting }
   } = form;
 
   const handleToastDemo = (type: 'success' | 'error' | 'warning' | 'info') => {
@@ -164,7 +164,7 @@ export default function Home() {
       success: 'Operation completed successfully! 🎉',
       error: 'Something went wrong. Please try again.',
       warning: 'Please check your input before proceeding.',
-      info: 'This is an informational message.',
+      info: 'This is an informational message.'
     };
     notify(type, messages[type]);
   };
@@ -598,7 +598,7 @@ export default function Home() {
             {[
               { icon: BarChart3, label: 'Performance Score', value: '100/100' },
               { icon: Users, label: 'Developer Friendly', value: 'TypeSafe' },
-              { icon: Settings, label: 'Build Time', value: '<10s' },
+              { icon: Settings, label: 'Build Time', value: '<10s' }
             ].map((stat, index) => (
               <motion.div
                 key={stat.label}

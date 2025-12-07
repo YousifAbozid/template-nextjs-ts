@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 
 /**
  * GET /api/docs - Serve Swagger UI HTML
+ *
+ * This serves the Swagger UI interface pointing to the OpenAPI spec at /openapi.json
  */
 export async function GET() {
   const swaggerUIHtml = `
@@ -11,6 +13,9 @@ export async function GET() {
     <meta charset="UTF-8">
     <title>API Documentation</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css" />
+    <style>
+      body { margin: 0; padding: 0; }
+    </style>
 </head>
 <body>
     <div id="swagger-ui"></div>
@@ -19,9 +24,9 @@ export async function GET() {
     <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-standalone-preset.js"></script>
     <script>
         window.onload = function() {
-            // Begin Swagger UI call
+            // Swagger UI configuration
             const ui = SwaggerUIBundle({
-                url: "/api/swagger",
+                url: "/api/openapi.json",
                 dom_id: '#swagger-ui',
                 deepLinking: true,
                 presets: [
@@ -42,7 +47,7 @@ export async function GET() {
 
   return new NextResponse(swaggerUIHtml, {
     headers: {
-      'Content-Type': 'text/html; charset=utf-8',
-    },
+      'Content-Type': 'text/html; charset=utf-8'
+    }
   });
 }

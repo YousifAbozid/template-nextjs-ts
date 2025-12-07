@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { connectDB } from '../database/connection';
+import { connectDB } from '@/lib/api/database/connection';
 
 /**
  * Database middleware for API routes
@@ -52,4 +52,4 @@ export const withDbConnection = (
   return descriptor;
 };
 
-export { connectDB } from '../database/connection';
+export { connectDB } from '@/lib/api/database/connection';

@@ -112,6 +112,6 @@ export function useAdvancedDebounce<T extends (...args: unknown[]) => unknown>(
   return {
     debounced: debouncedCallback as T,
     cancel,
-    isPending,
+    isPending
   };
 }

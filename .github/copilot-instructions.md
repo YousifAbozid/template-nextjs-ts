@@ -17,10 +17,11 @@ This is a **Next.js 16+ App Router full-stack application** with **MongoDB integ
 ```
 app/api/[resource]/
 ├── route.ts          # API endpoints (GET, POST, etc.)
-└── types.ts          # Route-specific DTOs/interfaces
+├── schema.ts         # Zod schemas for validation + OpenAPI
+└── openapi.ts        # OpenAPI route definitions
 ```
 
-**Always create both files together**. The OpenAPI generator scans `route.ts` for exported HTTP methods and `types.ts` for schemas.
+**Always create these three files together**. The system uses Zod schemas for validation and OpenAPI generation, with a functional registry pattern.
 
 ### Frontend Component Organization
 
@@ -49,38 +50,47 @@ export const GET = withDatabase(async () => {
 ### Type Definition Pattern
 
 ```typescript
-// types.ts - Use classes for DTOs (supports decorators)
-export class CreateUserDto {
-  name!: string; // Required field (no ?)
-  email!: string;
-}
+// schema.ts - Use Zod schemas for validation and OpenAPI
+import { z } from 'zod';
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
 
-export interface UserResponseDto {
-  // Interfaces for responses
-  _id: string;
-  name: string;
-  email: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+extendZodWithOpenApi(z);
+
+export const CreateUserRequestSchema = z
+  .object({
+    name: z
+      .string()
+      .min(1)
+      .openapi({ description: 'User name', example: 'John' }),
+    email: z
+      .string()
+      .email()
+      .openapi({ description: 'Email', example: 'john@example.com' })
+  })
+  .openapi('CreateUserRequest');
+
+// openapi.ts - Register routes with OpenAPI metadata
+import { registry, createRouteConfig } from '@/lib/api/openapi';
+import { CreateUserRequestSchema } from './schema';
+import './openapi'; // Import in route.ts to register
 ```
 
 ## Auto-Generation Workflow
 
-**Critical**: The build system (`npm run build`) automatically runs `npm run api:generate`. Don't skip this.
+**Critical**: The build system (`npm run build`) automatically runs `npm run api:generate` and `npm run api:sdk`.
 
 ```bash
-npm run api:generate    # Manual generation
-npm run api:watch      # Development with auto-regeneration
-npm run api:dev        # Next.js dev + OpenAPI watching
-npm run build          # Production build (includes api:generate)
+npm run api:generate    # Generate OpenAPI spec from route definitions
+npm run api:sdk         # Generate type-safe SDK with Orval
+npm run api:watch       # Watch mode: OpenAPI + SDK auto-regeneration
+npm run api:dev         # Next.js dev + OpenAPI + SDK watching
+npm run build           # Production build (includes generation)
 ```
 
 **Generated files (never edit manually)**:
 
-- `app/lib/api/types/openapi.json` - OpenAPI 3.0 spec
-- `app/lib/api/types/ApiTypes.ts` - TypeScript types
-- `app/lib/api/types/ApiClient.ts` - Type-safe client
+- `openapi.json` - OpenAPI 3.0 spec (project root)
+- `sdk/index.ts` - Type-safe SDK with React Query hooks
 
 ## Database Patterns
 
@@ -96,7 +106,7 @@ interface IModel extends Document {
 
 const ModelSchema: Schema<IModel> = new Schema(
   {
-    field: { type: String, required: true },
+    field: { type: String, required: true }
   },
   { timestamps: true }
 );
@@ -136,8 +146,10 @@ return NextResponse.json(
 ### Configuration
 
 - `app/lib/api/config.ts` - Database, OpenAPI, security config
+- `app/lib/api/openapi/registry.ts` - OpenAPI registry and document generator
+- `orval.config.ts` - Orval SDK generator configuration
 - `proxy.ts` - CORS and proxy configuration
-- `package.json` - Scripts: `api:generate`, `api:watch`, `api:dev`, `api:type-check`
+- `package.json` - Scripts: `api:generate`, `api:sdk`, `api:watch`, `api:dev`
 
 ### Core Middleware & Utilities
 
@@ -148,24 +160,26 @@ return NextResponse.json(
 
 ### Generation Scripts
 
-- `scripts/generate-openapi.js` - Route scanner and OpenAPI generator
-- `scripts/watch-openapi.js` - Development file watcher
-- Both scripts scan `app/api/**/route.ts` files automatically
+- `scripts/generate-openapi.mjs` - Imports openapi.ts files to generate OpenAPI spec
+- `scripts/watch-openapi.mjs` - Development file watcher for schema/openapi changes
+- Orval generates React Query hooks from OpenAPI spec
 
 ## Development Workflows
 
 ### API Development
 
-1. **Add route**: Create `app/api/[resource]/route.ts` + `types.ts`
-2. **Export HTTP methods**: `export const GET = withDatabase(async () => ...)`
-3. **Define types**: Classes for request DTOs, interfaces for responses
-4. **Run generation**: `npm run api:generate` or use watch mode
-5. **Check docs**: http://localhost:3000/api/docs (Swagger UI)
+1. **Add route**: Create `app/api/[resource]/route.ts` + `schema.ts` + `openapi.ts`
+2. **Define schemas**: Create Zod schemas in `schema.ts` with OpenAPI metadata
+3. **Register routes**: Use registry in `openapi.ts` to define API endpoints
+4. **Implement handlers**: Export HTTP methods in `route.ts` with `withDatabase` wrapper
+5. **Import openapi**: Add `import './openapi'` in `route.ts` to register routes
+6. **Run generation**: `npm run api:generate && npm run api:sdk` or use watch mode
+7. **Check docs**: http://localhost:3000/api/docs (Swagger UI)
 
 ### Frontend Development
 
-1. **Use generated types**: Import from `@/lib/api/types/ApiTypes`
-2. **API calls**: Use React Query with generated client or custom hooks
+1. **Use generated SDK**: Import from `sdk/` for React Query hooks and types
+2. **API calls**: Use auto-generated React Query hooks from Orval
 3. **UI components**: Extend existing `app/components/ui/` components
 4. **State management**: React Query for server state, React hooks for client state
 5. **Styling**: Tailwind CSS with CSS custom properties for theming
@@ -176,9 +190,10 @@ return NextResponse.json(
 
 - **Mongoose models**: Always check `mongoose.models.ModelName` before creating
 - **Import paths**: Use `@/lib/` not relative paths
-- **Type exports**: Must use `export` keyword for OpenAPI discovery
-- **Route names**: Directory name becomes OpenAPI tag (`users` → `Users`)
-- **Build order**: Generation runs before Next.js build, not after
+- **Import openapi**: Must add `import './openapi'` in `route.ts` for route registration
+- **Zod schemas**: Use `.openapi()` method to add OpenAPI metadata
+- **Registry pattern**: Use `registry.registerPath()` in `openapi.ts` files
+- **Build order**: api:generate → api:sdk → Next.js build
 - **withDatabase**: Required for all route handlers that need DB access
 
 ### Frontend Development
@@ -199,8 +214,8 @@ return NextResponse.json(
 ## Key Dependencies & Architecture
 
 **Frontend**: React 19 + Next.js 16 + Tailwind CSS v4 + Framer Motion + React Query  
-**Backend**: MongoDB + Mongoose + OpenAPI auto-generation  
-**Type Safety**: Full-stack TypeScript with auto-generated API types  
+**Backend**: MongoDB + Mongoose + Zod validation + OpenAPI 3.0 + Orval SDK generation  
+**Type Safety**: Full-stack TypeScript with Zod schemas and auto-generated React Query hooks  
 **Theming**: CSS custom properties with dark/light mode support
 
-The system prioritizes **zero configuration** - routes are discovered automatically, types are extracted from code, and documentation stays in sync.
+The system uses **functional, declarative patterns** - Zod schemas define validation and OpenAPI metadata, routes are registered functionally, and SDK is auto-generated with React Query hooks.

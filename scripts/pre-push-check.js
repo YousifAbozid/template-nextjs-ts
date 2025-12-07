@@ -10,7 +10,7 @@ import path from 'path';
 const API_FILES = [
   'lib/api/types/ApiClient.ts',
   'lib/api/types/ApiTypes.ts',
-  'lib/api/types/openapi.json',
+  'lib/api/types/openapi.json'
 ];
 
 function runCommand(command, description) {

@@ -19,7 +19,7 @@ const UserSchema: Schema<IUser> = new Schema(
       type: String,
       required: [true, 'Name is required'],
       trim: true,
-      maxlength: [100, 'Name cannot exceed 100 characters'],
+      maxlength: [100, 'Name cannot exceed 100 characters']
     },
     email: {
       type: String,
@@ -29,12 +29,12 @@ const UserSchema: Schema<IUser> = new Schema(
       lowercase: true,
       match: [
         /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-        'Please provide a valid email address',
-      ],
-    },
+        'Please provide a valid email address'
+      ]
+    }
   },
   {
-    timestamps: true, // Automatically adds createdAt and updatedAt
+    timestamps: true // Automatically adds createdAt and updatedAt
   }
 );
 

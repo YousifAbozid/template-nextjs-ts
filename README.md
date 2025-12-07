@@ -1,16 +1,20 @@
 # 🚀 Next.js Full-Stack Template
 
+> **⚡ New Architecture**: This template now uses a Zod-based functional architecture with no decorators!  
+> See [ARCHITECTURE_CHANGELOG.md](ARCHITECTURE_CHANGELOG.md) for details on what changed.
+
 A production-ready Next.js 16+ full-stack template with TypeScript, MongoDB, Tailwind CSS v4, and comprehensive tooling. Features auto-generated OpenAPI documentation, type-safe API client, React Query integration, dark mode support, custom UI components with Framer Motion, form validation with Zod, and complete developer experience.
 
 ## ✨ Features
 
 ### 🎯 **Dynamic OpenAPI System**
 
-- **Automatic Route Discovery**: Scans `app/api/**/route.ts` files automatically
-- **Type Extraction**: Reads co-located `types.ts` files and generates schemas
-- **Zero Configuration**: Works out of the box with your existing code structure
+- **Zod-Based Schemas**: Use Zod for validation with built-in OpenAPI metadata
+- **Functional Registry**: Declarative route registration with `@asteasolutions/zod-to-openapi`
+- **Type-Safe SDK**: Auto-generated React Query hooks with Orval
+- **Zero Decorators**: Clean, functional patterns without class decorators
 - **Live Documentation**: Interactive Swagger UI at `/api/docs`
-- **Type Safety**: Auto-generated TypeScript types and API client
+- **Full Type Safety**: End-to-end TypeScript with Zod inference
 
 ### 🗃️ **MongoDB Integration**
 
@@ -36,6 +40,8 @@ A production-ready Next.js 16+ full-stack template with TypeScript, MongoDB, Tai
 
 ## 🚀 Quick Start
 
+**New to this architecture?** Check out the [**Getting Started Guide**](GETTING_STARTED.md) for a step-by-step introduction.
+
 ### Prerequisites
 
 - Node.js 18+
@@ -56,8 +62,9 @@ npm install
 cp .env.example .env
 # Edit .env with your MongoDB connection string
 
-# Generate API documentation and types
+# Generate API documentation and SDK
 npm run api:generate
+npm run api:sdk
 
 # Start development server
 npm run dev
@@ -80,10 +87,11 @@ app/
 ├── api/                    # 🟢 API Routes (You modify these)
 │   ├── users/
 │   │   ├── route.ts       # API endpoints (GET, POST, etc.)
-│   │   └── types.ts       # Route-specific DTOs/interfaces
+│   │   ├── schema.ts      # Zod schemas for validation + OpenAPI
+│   │   └── openapi.ts     # OpenAPI route registration
 │   ├── health/            # Health check endpoint
 │   ├── docs/              # Swagger UI documentation
-│   └── swagger/           # OpenAPI specification endpoint
+│   └── openapi.json/      # OpenAPI specification endpoint
 ├── components/            # 🟢 React components
 │   ├── ui/                # Base UI components (Button, Card, etc.)
 │   └── shared/            # Shared business components
@@ -96,8 +104,9 @@ app/
 │   │   ├── database/      # 🟢 Database connection utilities
 │   │   ├── middleware/    # 🟢 Custom middleware
 │   │   ├── models/        # 🟢 Mongoose models
+│   │   ├── openapi/       # 🟢 OpenAPI registry and helpers
 │   │   ├── config.ts      # 🟡 API configuration
-│   │   └── types/         # 🔴 Auto-generated files (don't edit)
+│   │   └── sdk-mutator.ts # 🟡 Orval custom fetch instance
 │   └── network/           # 🟢 React Query configuration
 ├── layout.tsx             # Root layout with providers
 ├── page.tsx               # Landing page with component showcase
@@ -112,63 +121,170 @@ app/
 
 ```bash
 mkdir app/api/products
-touch app/api/products/route.ts app/api/products/types.ts
+touch app/api/products/route.ts app/api/products/schema.ts app/api/products/openapi.ts
 ```
 
-### 2. Define Types (`types.ts`)
+### 2. Define Schemas (`schema.ts`)
 
 ```typescript
-export class CreateProductDto {
-  name!: string;
-  price!: number;
-  category!: string;
-  description?: string;
-}
+import { z } from 'zod';
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
 
-export interface ProductResponseDto {
-  _id: string;
-  name: string;
-  price: number;
-  category: string;
-  description?: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+extendZodWithOpenApi(z);
+
+export const CreateProductRequestSchema = z
+  .object({
+    name: z
+      .string()
+      .min(1)
+      .openapi({ description: 'Product name', example: 'Widget' }),
+    price: z
+      .number()
+      .min(0)
+      .openapi({ description: 'Price in USD', example: 29.99 }),
+    category: z
+      .string()
+      .openapi({ description: 'Product category', example: 'Electronics' }),
+    description: z
+      .string()
+      .optional()
+      .openapi({ description: 'Product description' })
+  })
+  .openapi('CreateProductRequest');
+
+export const ProductSchema = z
+  .object({
+    _id: z.string().openapi({ example: '507f1f77bcf86cd799439011' }),
+    name: z.string(),
+    price: z.number(),
+    category: z.string(),
+    description: z.string().optional(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date()
+  })
+  .openapi('Product');
+
+export type CreateProductRequest = z.infer<typeof CreateProductRequestSchema>;
+export type Product = z.infer<typeof ProductSchema>;
 ```
 
-### 3. Create Route Handler (`route.ts`)
+### 3. Register OpenAPI Routes (`openapi.ts`)
+
+```typescript
+import {
+  registry,
+  createRouteConfig,
+  createListResponse
+} from '@/lib/api/openapi';
+import { CreateProductRequestSchema, ProductSchema } from './schema';
+
+// GET /api/products
+registry.registerPath(
+  createRouteConfig({
+    method: 'get',
+    path: '/api/products',
+    tags: ['Products'],
+    summary: 'Get all products',
+    responses: {
+      200: {
+        description: 'List of products',
+        content: {
+          'application/json': {
+            schema: createListResponse(ProductSchema)
+          }
+        }
+      }
+    }
+  })
+);
+
+// POST /api/products
+registry.registerPath(
+  createRouteConfig({
+    method: 'post',
+    path: '/api/products',
+    tags: ['Products'],
+    summary: 'Create a new product',
+    request: {
+      body: {
+        content: {
+          'application/json': {
+            schema: CreateProductRequestSchema
+          }
+        }
+      }
+    },
+    responses: {
+      201: {
+        description: 'Product created successfully',
+        content: {
+          'application/json': {
+            schema: z.object({
+              success: z.literal(true),
+              data: ProductSchema,
+              message: z.string()
+            })
+          }
+        }
+      }
+    }
+  })
+);
+```
+
+### 4. Create Route Handler (`route.ts`)
 
 ```typescript
 import { NextRequest, NextResponse } from 'next/server';
-import { withDatabase } from '@/app/lib/api/middleware';
-import { Product } from '@/app/lib/api/models';
+import { withDatabase } from '@/lib/api/middleware';
+import { Product } from '@/lib/api/models';
+import { CreateProductRequestSchema } from './schema';
+import './openapi'; // ⚠️ CRITICAL: Import to register OpenAPI routes
 
 export const GET = withDatabase(async () => {
   const products = await Product.find().sort({ createdAt: -1 });
   return NextResponse.json({
     success: true,
     data: products,
-    count: products.length,
+    count: products.length
   });
 });
 
 export const POST = withDatabase(async (req: NextRequest) => {
-  const body = await req.json();
-  const product = new Product(body);
-  const savedProduct = await product.save();
+  try {
+    const body = await req.json();
 
-  return NextResponse.json(
-    {
-      success: true,
-      data: savedProduct,
-      message: 'Product created successfully',
-    },
-    { status: 201 }
-  );
+    // Validate with Zod
+    const validationResult = CreateProductRequestSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        { success: false, error: validationResult.error.errors[0].message },
+        { status: 400 }
+      );
+    }
+
+    const product = new Product(validationResult.data);
+    const savedProduct = await product.save();
+
+    return NextResponse.json(
+      {
+        success: true,
+        data: savedProduct,
+        message: 'Product created successfully'
+      },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.error('Create product error:', error);
+    return NextResponse.json(
+      { success: false, error: 'Failed to create product' },
+      { status: 500 }
+    );
+  }
 });
 ```
 
-### 4. Create Database Model (`app/lib/api/models/Product.ts`)
+### 5. Create Database Model (`app/lib/api/models/Product.ts`)
 
 ```typescript
 import mongoose, { Schema, Document } from 'mongoose';
@@ -187,7 +303,7 @@ const ProductSchema: Schema<IProduct> = new Schema(
     name: { type: String, required: true, trim: true },
     price: { type: Number, required: true, min: 0 },
     category: { type: String, required: true, trim: true },
-    description: { type: String, trim: true },
+    description: { type: String, trim: true }
   },
   { timestamps: true }
 );
@@ -196,17 +312,18 @@ export const Product =
   mongoose.models.Product || mongoose.model<IProduct>('Product', ProductSchema);
 ```
 
-### 5. Regenerate Documentation
+### 6. Generate Documentation and SDK
 
 ```bash
-npm run api:generate
+npm run api:generate  # Generate OpenAPI spec
+npm run api:sdk       # Generate React Query SDK
 ```
 
 **Result**: Your new route automatically appears in:
 
-- OpenAPI spec at `/api/swagger`
+- OpenAPI spec at `/api/openapi.json`
 - Interactive docs at `/api/docs`
-- Generated TypeScript types
+- Generated React Query hooks in `sdk/index.ts`
 
 ## 🎨 Frontend Development
 
@@ -238,25 +355,28 @@ export function ExampleComponent() {
 }
 ```
 
-### API Integration with React Query
+### API Integration with Generated SDK
 
 ```typescript
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useGetApiUsers, usePostApiUsers } from 'sdk';
 
-// Using auto-generated API client
+// Using auto-generated React Query hooks
 export function UsersList() {
-  const { data: users, isLoading } = useQuery({
-    queryKey: ['users'],
-    queryFn: () => fetch('/api/users').then(res => res.json()),
-  });
+  const { data: response, isLoading } = useGetApiUsers();
+  const createUser = usePostApiUsers();
 
   if (isLoading) return <div>Loading...</div>;
 
   return (
     <div>
-      {users?.data.map(user => (
+      {response?.data?.map(user => (
         <div key={user._id}>{user.name}</div>
       ))}
+      <button
+        onClick={() => createUser.mutate({ data: { name: 'John', email: 'john@example.com' } })}
+      >
+        Add User
+      </button>
     </div>
   );
 }
@@ -266,11 +386,12 @@ export function UsersList() {
 
 ```bash
 npm run dev              # Start development server
-npm run build            # Build for production (includes OpenAPI generation)
+npm run build            # Build for production (includes OpenAPI + SDK generation)
 npm run start            # Start production server
-npm run api:generate     # Generate OpenAPI spec, types, and client
-npm run api:watch        # Watch mode for development
-npm run api:dev          # Start dev server + OpenAPI watching
+npm run api:generate     # Generate OpenAPI spec from route definitions
+npm run api:sdk          # Generate React Query SDK with Orval
+npm run api:watch        # Watch mode: OpenAPI + SDK auto-regeneration
+npm run api:dev          # Start dev server + watch OpenAPI + SDK
 npm run type-check       # TypeScript type checking
 npm run lint             # ESLint
 npm run lint:fix         # ESLint with auto-fix
@@ -284,24 +405,28 @@ Once running, access your documentation and app:
 
 - **Frontend App**: [http://localhost:3000](http://localhost:3000) (Landing page with component showcase)
 - **Interactive Docs**: [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
-- **OpenAPI Spec**: [http://localhost:3000/api/swagger](http://localhost:3000/api/swagger)
+- **OpenAPI Spec**: [http://localhost:3000/api/openapi.json](http://localhost:3000/api/openapi.json)
 - **Health Check**: [http://localhost:3000/api/health](http://localhost:3000/api/health)
 
 ## 🔄 Auto-Generation Workflow
 
-The system automatically:
+The system uses a two-step generation process:
 
-1. **Discovers Routes**: Scans all `app/api/**/route.ts` files
-2. **Extracts Methods**: Finds exported HTTP methods (GET, POST, etc.)
-3. **Reads Types**: Processes co-located `types.ts` files for schemas
-4. **Generates Docs**: Creates comprehensive OpenAPI specification
-5. **Creates Types**: Generates TypeScript types and API client
+1. **OpenAPI Generation**: Imports all `openapi.ts` files to build the OpenAPI spec
+2. **SDK Generation**: Uses Orval to generate React Query hooks from the spec
+
+### How It Works:
+
+1. Define **Zod schemas** in `schema.ts` with `.openapi()` metadata
+2. Register routes in `openapi.ts` using `registry.registerPath()`
+3. Import `'./openapi'` in `route.ts` to trigger registration
+4. Run `npm run api:generate` to build `openapi.json`
+5. Run `npm run api:sdk` to generate React Query hooks in `sdk/`
 
 ### Generated Files (Auto-updated)
 
-- `app/lib/api/types/openapi.json` - OpenAPI 3.0 specification
-- `app/lib/api/types/ApiTypes.ts` - TypeScript types
-- `app/lib/api/types/ApiClient.ts` - Type-safe API client
+- `openapi.json` - OpenAPI 3.0 specification (project root)
+- `sdk/index.ts` - Type-safe React Query hooks and types
 
 ## 🛠️ Tech Stack
 
@@ -318,8 +443,10 @@ The system automatically:
 
 - **Language**: TypeScript with ES Modules
 - **Database**: [MongoDB](https://www.mongodb.com/) with [Mongoose](https://mongoosejs.com/)
+- **Validation**: [Zod](https://zod.dev/) schemas with OpenAPI extensions
 - **Documentation**: [OpenAPI 3.0](https://spec.openapis.org/oas/v3.0.3) + [Swagger UI](https://swagger.io/tools/swagger-ui/)
-- **Type Generation**: Auto-generated TypeScript types and API client
+- **SDK Generation**: [Orval](https://orval.dev/) for React Query hooks
+- **OpenAPI Tools**: [@asteasolutions/zod-to-openapi](https://github.com/asteasolutions/zod-to-openapi)
 
 ### Developer Tools
 
@@ -361,10 +488,10 @@ npm start
 
 ## 📚 Additional Resources
 
-- **[Development Guide](app/DEVELOPMENT_GUIDE.md)** - Comprehensive development documentation
+- **[Backend Development Guide](app/BACKEND_DEVELOPMENT_GUIDE.md)** - Comprehensive backend documentation
+- **[SDK Usage Examples](SDK_USAGE_EXAMPLES.md)** - Frontend integration with React Query
+- **[Middleware Guide](MIDDLEWARE_GUIDE.md)** - Understanding Next.js proxy vs route middleware
 - **[GitHub Copilot Instructions](.github/copilot-instructions.md)** - AI coding assistant setup
-- **[Examples](examples/)** - Common implementation patterns
-- **[Contributing](CONTRIBUTING.md)** - Contribution guidelines
 
 ## 🤝 Contributing
 

@@ -24,7 +24,7 @@ const getBadgeClasses = (variant: BadgeVariant): string => {
       'border-transparent bg-accent-success text-text-inverse hover:bg-accent-success/80',
     warning:
       'border-transparent bg-accent-warning text-text-inverse hover:bg-accent-warning/80',
-    outline: 'text-text-primary border-border-primary',
+    outline: 'text-text-primary border-border-primary'
   };
 
   return `${baseClasses} ${variantClasses[variant]}`;

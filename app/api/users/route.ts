@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { withDatabase } from '@/lib/api/middleware';
 import { User } from '@/lib/api/models';
+import { CreateUserRequestSchema } from './schema';
+import './openapi'; // Import to register OpenAPI routes
 
 /**
- * Get all users
+ * GET /api/users - Get all users
  */
 export const GET = withDatabase(async () => {
   try {
@@ -12,14 +14,14 @@ export const GET = withDatabase(async () => {
     return NextResponse.json({
       success: true,
       data: users,
-      count: users.length,
+      count: users.length
     });
   } catch (error) {
     console.error('Get users error:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to fetch users',
+        error: 'Failed to fetch users'
       },
       { status: 500 }
     );
@@ -27,23 +29,25 @@ export const GET = withDatabase(async () => {
 });
 
 /**
- * Create a new user
+ * POST /api/users - Create a new user
  */
 export const POST = withDatabase(async (req: NextRequest) => {
   try {
     const body = await req.json();
-    const { name, email } = body;
 
-    // Basic validation
-    if (!name || !email) {
+    // Validate with Zod
+    const validationResult = CreateUserRequestSchema.safeParse(body);
+    if (!validationResult.success) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Name and email are required',
+          error: validationResult.error.issues[0].message
         },
         { status: 400 }
       );
     }
+
+    const { name, email } = validationResult.data;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -51,7 +55,7 @@ export const POST = withDatabase(async (req: NextRequest) => {
       return NextResponse.json(
         {
           success: false,
-          error: 'User with this email already exists',
+          error: 'User with this email already exists'
         },
         { status: 400 }
       );
@@ -65,7 +69,7 @@ export const POST = withDatabase(async (req: NextRequest) => {
       {
         success: true,
         data: savedUser,
-        message: 'User created successfully',
+        message: 'User created successfully'
       },
       { status: 201 }
     );
@@ -77,7 +81,7 @@ export const POST = withDatabase(async (req: NextRequest) => {
       return NextResponse.json(
         {
           success: false,
-          error: error.message,
+          error: error.message
         },
         { status: 400 }
       );
@@ -86,7 +90,7 @@ export const POST = withDatabase(async (req: NextRequest) => {
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to create user',
+        error: 'Failed to create user'
       },
       { status: 500 }
     );

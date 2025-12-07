@@ -25,14 +25,14 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
     const sizeClasses = {
       sm: 'h-2',
       md: 'h-3',
-      lg: 'h-4',
+      lg: 'h-4'
     };
 
     const variantClasses = {
       default: 'bg-accent-primary',
       success: 'bg-accent-success',
       warning: 'bg-accent-warning',
-      error: 'bg-accent-error',
+      error: 'bg-accent-error'
     };
 
     return (

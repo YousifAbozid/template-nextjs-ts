@@ -31,8 +31,8 @@ export async function checkDatabaseHealth(): Promise<ComponentHealth> {
         responseTime: Date.now() - startTime,
         details: {
           readyState: mongoose.connection.readyState,
-          host: mongoose.connection.host,
-        },
+          host: mongoose.connection.host
+        }
       };
     }
 
@@ -50,8 +50,8 @@ export async function checkDatabaseHealth(): Promise<ComponentHealth> {
       details: {
         host: mongoose.connection.host,
         name: mongoose.connection.name,
-        readyState: mongoose.connection.readyState,
-      },
+        readyState: mongoose.connection.readyState
+      }
     };
   } catch (error: unknown) {
     const responseTime = Date.now() - startTime;
@@ -62,8 +62,8 @@ export async function checkDatabaseHealth(): Promise<ComponentHealth> {
       responseTime,
       details: {
         error: error instanceof Error ? error.message : 'Unknown error',
-        readyState: mongoose.connection.readyState,
-      },
+        readyState: mongoose.connection.readyState
+      }
     };
   }
 }

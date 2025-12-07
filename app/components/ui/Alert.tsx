@@ -11,7 +11,7 @@ const getAlertClasses = (variant: AlertVariant): string => {
     destructive: 'border-accent-error/50 text-accent-error bg-state-error-bg',
     success: 'border-accent-success/50 text-accent-success bg-state-success-bg',
     warning: 'border-accent-warning/50 text-accent-warning bg-state-warning-bg',
-    info: 'border-accent-info/50 text-accent-info bg-state-info-bg',
+    info: 'border-accent-info/50 text-accent-info bg-state-info-bg'
   };
 
   return `${baseClasses} ${variantClasses[variant]}`;

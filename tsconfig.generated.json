@@ -1,8 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "outDir": "./app/lib/api/types"
-  },
-  "include": ["app/lib/api/types"],
-  "exclude": ["node_modules"]
-}

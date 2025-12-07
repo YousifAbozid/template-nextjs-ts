@@ -12,17 +12,14 @@ export default defineConfig([
     'out/**',
     'build/**',
     'next-env.d.ts',
-
-    // generated API files
-    'app/lib/api/types/**',
+    'node_modules/**',
+    'public/**',
 
     // scripts
     'scripts/**',
 
-    // backend internals (decorators, schema, validation)
-    'app/lib/api/decorators/**',
-    'app/lib/api/schema/**',
-    'app/lib/api/validation/**',
+    // SDK folder
+    'sdk/**',
   ]),
 
   // === Backend zone (soft rules) ===

@@ -1,0 +1,525 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Next.js Functional API",
+    "version": "1.0.0",
+    "description": "Modern Next.js API with Zod schemas and functional OpenAPI generation",
+    "contact": {
+      "name": "API Support",
+      "url": "https://github.com/YousifAbozid/template-nextjs-backend"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local development server"
+    },
+    {
+      "url": "https://template-nextjs-backend.vercel.app",
+      "description": "Development server (Vercel)"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "ComponentHealth": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "healthy",
+              "degraded",
+              "unhealthy"
+            ],
+            "description": "Component health status",
+            "example": "healthy"
+          },
+          "message": {
+            "type": "string",
+            "description": "Health check message"
+          },
+          "responseTime": {
+            "type": "number",
+            "description": "Response time in ms"
+          },
+          "details": {
+            "type": "object",
+            "additionalProperties": {
+              "nullable": true
+            },
+            "description": "Additional details"
+          }
+        },
+        "required": [
+          "status",
+          "message"
+        ]
+      },
+      "HealthResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "healthy",
+              "degraded",
+              "unhealthy"
+            ],
+            "description": "Component health status",
+            "example": "healthy"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Current timestamp",
+            "example": "2023-12-04T10:30:00Z"
+          },
+          "version": {
+            "type": "string",
+            "description": "Service version",
+            "example": "1.0.0"
+          },
+          "uptime": {
+            "type": "number",
+            "description": "Server uptime in seconds",
+            "example": 3600
+          },
+          "checks": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ComponentHealth"
+            },
+            "description": "Component-specific health checks"
+          }
+        },
+        "required": [
+          "status",
+          "timestamp"
+        ]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "User ID",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "User full name",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "User email address",
+            "example": "john@example.com"
+          },
+          "createdAt": {
+            "type": "string",
+            "nullable": true,
+            "format": "date",
+            "description": "Creation timestamp",
+            "example": "2023-12-04T10:30:00Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "nullable": true,
+            "format": "date",
+            "description": "Last update timestamp",
+            "example": "2023-12-04T10:30:00Z"
+          }
+        },
+        "required": [
+          "_id",
+          "name",
+          "email",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "UserListResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          },
+          "count": {
+            "type": "number",
+            "description": "Total number of users"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "count"
+        ]
+      },
+      "UserResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "data": {
+            "$ref": "#/components/schemas/User"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "success",
+          "data"
+        ]
+      },
+      "CreateUserRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "User full name",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "User email address",
+            "example": "john@example.com"
+          }
+        },
+        "required": [
+          "name",
+          "email"
+        ]
+      }
+    },
+    "parameters": {}
+  },
+  "paths": {
+    "/api/health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Health check endpoint",
+        "description": "Check the overall health status of the API and its dependencies. Optionally check specific components.",
+        "responses": {
+          "200": {
+            "description": "Health check completed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get all users",
+        "description": "Retrieve a list of all users in the system",
+        "responses": {
+          "200": {
+            "description": "List of users retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Create a new user",
+        "description": "Create a new user with the provided information",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

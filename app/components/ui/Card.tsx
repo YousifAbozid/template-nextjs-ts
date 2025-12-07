@@ -16,7 +16,7 @@ const Card = React.forwardRef<
     ref={ref}
     className={[
       'rounded-lg border border-border-primary bg-background-card text-text-primary shadow-sm',
-      className,
+      className
     ]
       .filter(Boolean)
       .join(' ')}
@@ -50,7 +50,7 @@ const CardTitle = React.forwardRef<
     ref={ref}
     className={[
       'text-2xl font-semibold leading-none tracking-tight text-text-primary',
-      className,
+      className
     ]
       .filter(Boolean)
       .join(' ')}
@@ -105,5 +105,5 @@ export {
   CardFooter,
   CardTitle,
   CardDescription,
-  CardContent,
+  CardContent
 };

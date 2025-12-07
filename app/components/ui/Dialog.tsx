@@ -44,7 +44,7 @@ const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
         ref={ref}
         className={[
           'grid w-full max-w-lg gap-4 border border-border-primary bg-background-card p-6 shadow-lg rounded-lg',
-          className,
+          className
         ]
           .filter(Boolean)
           .join(' ')}
@@ -90,7 +90,7 @@ const DialogFooter = ({
   <div
     className={[
       'flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2',
-      className,
+      className
     ]
       .filter(Boolean)
       .join(' ')}
@@ -107,7 +107,7 @@ const DialogTitle = forwardRef<
     ref={ref}
     className={[
       'text-lg font-semibold leading-none tracking-tight text-text-primary',
-      className,
+      className
     ]
       .filter(Boolean)
       .join(' ')}
@@ -136,5 +136,5 @@ export {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
+  DialogTitle
 };
