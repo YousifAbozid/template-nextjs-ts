@@ -19,7 +19,7 @@
       "description": "Local development server"
     },
     {
-      "url": "https://template-nextjs-backend.vercel.app",
+      "url": "https://template-nextjs-ts.vercel.app",
       "description": "Development server (Vercel)"
     }
   ],
