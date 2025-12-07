@@ -37,7 +37,7 @@ export function generateOpenApiDocument() {
             {
               url:
                 process.env.PRODUCTION_URL ||
-                'https://template-nextjs-backend.vercel.app',
+                'https://template-nextjs-ts.vercel.app',
               description: 'Production server'
             }
           ]
@@ -47,7 +47,7 @@ export function generateOpenApiDocument() {
               description: 'Local development server'
             },
             {
-              url: 'https://template-nextjs-backend.vercel.app',
+              url: 'https://template-nextjs-ts.vercel.app',
               description: 'Development server (Vercel)'
             }
           ]

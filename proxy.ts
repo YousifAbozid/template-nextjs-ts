@@ -16,7 +16,7 @@ import { NextRequest, NextResponse } from 'next/server';
 const allowedOrigins = [
   'http://localhost:3000',
   'https://localhost:3000',
-  'https://template-nextjs-backend.vercel.app'
+  'https://template-nextjs-ts.vercel.app'
   // Add your frontend domains here
 ];
 
