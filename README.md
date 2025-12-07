@@ -1,8 +1,5 @@
 # 🚀 Next.js Full-Stack Template
 
-> **⚡ New Architecture**: This template now uses a Zod-based functional architecture with no decorators!  
-> See [ARCHITECTURE_CHANGELOG.md](ARCHITECTURE_CHANGELOG.md) for details on what changed.
-
 A production-ready Next.js 16+ full-stack template with TypeScript, MongoDB, Tailwind CSS v4, and comprehensive tooling. Features auto-generated OpenAPI documentation, type-safe API client, React Query integration, dark mode support, custom UI components with Framer Motion, form validation with Zod, and complete developer experience.
 
 ## ✨ Features
@@ -39,8 +36,6 @@ A production-ready Next.js 16+ full-stack template with TypeScript, MongoDB, Tai
 - **Modern Stack**: Next.js 16+ App Router with ES modules
 
 ## 🚀 Quick Start
-
-**New to this architecture?** Check out the [**Getting Started Guide**](GETTING_STARTED.md) for a step-by-step introduction.
 
 ### Prerequisites
 
