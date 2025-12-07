@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Providers } from '@/context/Providers';
@@ -14,12 +14,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL ||
+      process.env.VERCEL_URL ||
+      'http://localhost:3000'
+  ),
   title: {
     default: 'Next.js Full-Stack Template',
     template: '%s | Next.js Full-Stack Template'
   },
   description:
-    'Production-ready Next.js 16+ full-stack template with TypeScript, MongoDB, Tailwind CSS v4, and comprehensive tooling. Features auto-generated OpenAPI documentation, type-safe API client, React Query integration, dark mode support, custom UI components with Framer Motion, form validation with Zod, and complete developer experience with ESLint, Prettier, and Husky. Perfect for building scalable web applications with modern architecture patterns.',
+    'Production-ready Next.js 16+ full-stack template with TypeScript, MongoDB, Tailwind CSS v4, and comprehensive tooling. Features Zod-based schemas with auto-generated OpenAPI documentation, Orval SDK with React Query hooks, functional architecture with zero decorators, dark mode support, and complete developer experience.',
   keywords: [
     'Next.js',
     'TypeScript',
@@ -36,7 +41,9 @@ export const metadata: Metadata = {
     'Dark Mode',
     'Zod',
     'ESLint',
-    'Prettier'
+    'Prettier',
+    'Orval',
+    'Functional Programming'
   ],
   authors: [{ name: 'Yousif Abozid', url: 'https://github.com/YousifAbozid' }],
   creator: 'Yousif Abozid',
@@ -59,7 +66,7 @@ export const metadata: Metadata = {
     siteName: 'Next.js Full-Stack Template',
     title: 'Next.js Full-Stack Template',
     description:
-      'Production-ready Next.js 16+ full-stack template with TypeScript, MongoDB, Tailwind CSS v4, and comprehensive tooling.',
+      'Production-ready Next.js 16+ full-stack template with Zod-based schemas, auto-generated OpenAPI documentation, and Orval SDK with React Query hooks.',
     images: [
       {
         url: '/og-image.png',
@@ -73,20 +80,21 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Next.js Full-Stack Template',
     description:
-      'Production-ready Next.js 16+ full-stack template with TypeScript, MongoDB, Tailwind CSS v4, and comprehensive tooling.',
+      'Production-ready Next.js 16+ full-stack template with Zod-based schemas, auto-generated OpenAPI documentation, and Orval SDK with React Query hooks.',
     images: ['/og-image.png'],
     creator: '@YousifAbozid'
-  },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1
   },
   category: 'technology',
   verification: {
     google: 'your-google-verification-code',
     yandex: 'your-yandex-verification-code'
   }
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1
 };
 
 export default function RootLayout({
