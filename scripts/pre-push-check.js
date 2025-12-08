@@ -5,7 +5,6 @@
 
 import { execSync } from 'child_process';
 import fs from 'fs';
-import path from 'path';
 
 const API_FILES = [
   'lib/api/types/ApiClient.ts',
