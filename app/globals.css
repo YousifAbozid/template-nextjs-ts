@@ -124,6 +124,36 @@
 /* ===== Form Element Resets in Base Layer ===== */
 
 @layer base {
+  /* Fix mobile layout issues */
+  html,
+  body {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  /* Ensure all sections are properly contained */
+  section,
+  main,
+  nav,
+  footer {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  /* Fix code blocks that might overflow */
+  pre,
+  code {
+    max-width: 100%;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
   /* Reset all form elements */
   select,
   input[type='radio'],
