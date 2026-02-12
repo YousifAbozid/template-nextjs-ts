@@ -25,40 +25,6 @@
   ],
   "components": {
     "schemas": {
-      "ComponentHealth": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "enum": [
-              "healthy",
-              "degraded",
-              "unhealthy"
-            ],
-            "description": "Component health status",
-            "example": "healthy"
-          },
-          "message": {
-            "type": "string",
-            "description": "Health check message"
-          },
-          "responseTime": {
-            "type": "number",
-            "description": "Response time in ms"
-          },
-          "details": {
-            "type": "object",
-            "additionalProperties": {
-              "nullable": true
-            },
-            "description": "Additional details"
-          }
-        },
-        "required": [
-          "status",
-          "message"
-        ]
-      },
       "HealthResponse": {
         "type": "object",
         "properties": {
@@ -101,47 +67,38 @@
           "timestamp"
         ]
       },
-      "User": {
+      "ComponentHealth": {
         "type": "object",
         "properties": {
-          "_id": {
+          "status": {
             "type": "string",
-            "description": "User ID",
-            "example": "507f1f77bcf86cd799439011"
+            "enum": [
+              "healthy",
+              "degraded",
+              "unhealthy"
+            ],
+            "description": "Component health status",
+            "example": "healthy"
           },
-          "name": {
+          "message": {
             "type": "string",
-            "minLength": 1,
-            "description": "User full name",
-            "example": "John Doe"
+            "description": "Health check message"
           },
-          "email": {
-            "type": "string",
-            "format": "email",
-            "description": "User email address",
-            "example": "john@example.com"
+          "responseTime": {
+            "type": "number",
+            "description": "Response time in ms"
           },
-          "createdAt": {
-            "type": "string",
-            "nullable": true,
-            "format": "date",
-            "description": "Creation timestamp",
-            "example": "2023-12-04T10:30:00Z"
-          },
-          "updatedAt": {
-            "type": "string",
-            "nullable": true,
-            "format": "date",
-            "description": "Last update timestamp",
-            "example": "2023-12-04T10:30:00Z"
+          "details": {
+            "type": "object",
+            "additionalProperties": {
+              "nullable": true
+            },
+            "description": "Additional details"
           }
         },
         "required": [
-          "_id",
-          "name",
-          "email",
-          "createdAt",
-          "updatedAt"
+          "status",
+          "message"
         ]
       },
       "UserListResponse": {
@@ -168,6 +125,49 @@
           "success",
           "data",
           "count"
+        ]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "User ID",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "User full name",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "User email address",
+            "example": "john@example.com"
+          },
+          "createdAt": {
+            "type": "string",
+            "nullable": true,
+            "format": "date-time",
+            "description": "Creation timestamp",
+            "example": "2023-12-04T10:30:00Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "nullable": true,
+            "format": "date-time",
+            "description": "Last update timestamp",
+            "example": "2023-12-04T10:30:00Z"
+          }
+        },
+        "required": [
+          "_id",
+          "name",
+          "email",
+          "createdAt",
+          "updatedAt"
         ]
       },
       "UserResponse": {
