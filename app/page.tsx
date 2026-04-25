@@ -17,7 +17,7 @@ import {
   AlertCircle,
   Info,
   AlertTriangle,
-  Github,
+  // Github,
   Star,
   Download,
   Rocket,
@@ -253,7 +253,7 @@ export default function Home() {
                 }
                 className="cursor-pointer"
               >
-                <Github className="w-5 h-5 mr-2" />
+                {/* {<Github className="w-5 h-5 mr-2" />} */}
                 View on GitHub
               </Button>
             </div>
