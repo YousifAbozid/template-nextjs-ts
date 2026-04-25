@@ -8,7 +8,7 @@ export default defineConfig({
       target: './sdk/index.ts',
       client: 'react-query',
       clean: ['./sdk/index.ts'],
-      prettier: true,
+      // prettier: true,
       override: {
         mutator: {
           path: './app/lib/api/sdk-mutator.ts',
